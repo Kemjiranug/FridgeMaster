@@ -216,25 +216,53 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .field-ico { width: 26px; height: 26px; border-radius: 50%; background: #e2f3ea; display: grid; place-items: center; flex: none; }
 .auth-field input { border: none; outline: none; flex: 1; min-width: 0; font-family: inherit; font-size: 15px; font-weight: 600; color: var(--ink); background: transparent; }
 .auth-field input::placeholder { color: #9aa4ab; font-weight: 500; }
+.auth-btn {
+  width: 100%;
+  margin-top: 22px;
+  padding: 13px 20px;
+  font-size: 17px;
+  border-radius: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .auth-forgot {
   background: none;
   border: none;
-  color: var(--green-dark);
+  color: var(--muted, #64748b);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 13.5px;
   cursor: pointer;
-  padding: 0;
+  padding: 8px 12px;
+  margin: 8px auto 6px;
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
   transition: color .15s ease;
+  display: inline-block;
+  text-align: center;
 }
 .auth-forgot:hover { color: var(--teal); }
 .auth-create {
-  background: #fff; border: 2px solid #dfe4e7; color: var(--green-dark); font-weight: 800; font-size: 14px;
-  border-radius: 24px; padding: 10px 22px; margin: 0 auto;
-  transition: transform .1s ease, box-shadow .12s ease;
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  color: var(--green-dark);
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 24px;
+  padding: 11px 22px;
+  margin: 6px auto 0;
+  width: 100%;
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .12s ease, background .15s ease, border-color .15s ease;
+  text-align: center;
 }
-.auth-create:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(40,60,50,.14); }
+.auth-create:hover {
+  transform: translateY(-1px);
+  background: #ffffff;
+  border-color: #94a3b8;
+  box-shadow: 0 4px 12px rgba(40,60,50,.1);
+}
 .auth-switch { text-align: center; color: var(--muted); font-weight: 600; margin: 18px 0 0; font-size: 14px; }
 .auth-link { background: none; color: var(--green-dark); font-weight: 800; }
 

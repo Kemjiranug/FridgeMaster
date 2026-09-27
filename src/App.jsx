@@ -1698,6 +1698,9 @@ function Auth({ mode, onAuthed, onSwitch }) {
     <main className="auth">
       <div className="auth-card">
         <h1 className="auth-title auth-title--plain">Log In</h1>
+        <p className="auth-sub" style={{ margin: '-14px 0 20px', fontSize: '14px', lineHeight: 1.4 }}>
+          Stock your shelves and get sorting!
+        </p>
 
         <label className="auth-label">Email</label>
         <div className="auth-field">
@@ -1708,12 +1711,7 @@ function Auth({ mode, onAuthed, onSwitch }) {
           />
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px', marginBottom: '6px' }}>
-          <label className="auth-label" style={{ margin: 0 }}>Password</label>
-          <button type="button" className="auth-forgot" onClick={() => { setError(''); setNotice(''); onSwitch('forgot') }}>
-            Forgot password?
-          </button>
-        </div>
+        <label className="auth-label">Password</label>
         <div className="auth-field">
           <span className="field-ico"><LockGlyph /></span>
           <input
@@ -1728,8 +1726,14 @@ function Auth({ mode, onAuthed, onSwitch }) {
         <button className="btn btn-play auth-btn" type="button" disabled={loading} onClick={handleLogIn}>
           {loading ? 'Logging in…' : 'Log In'}
         </button>
-        <div className="auth-or">or</div>
-        <button type="button" className="auth-create" onClick={() => onSwitch('signup')}>Create New Account</button>
+
+        <button type="button" className="auth-forgot" onClick={() => { setError(''); setNotice(''); onSwitch('forgot') }}>
+          Forgot password?
+        </button>
+
+        <button type="button" className="auth-create" onClick={() => onSwitch('signup')}>
+          Create New Account
+        </button>
       </div>
     </main>
   )
