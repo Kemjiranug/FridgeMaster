@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="riceBowlGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="riceMoundGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="bowlBlueStripe" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shadow -->
+  <ellipse cx="60" cy="106" rx="38" ry="7" fill="#00000018"/>
+
+  <!-- Bowl foot / base ring -->
+  <ellipse cx="60" cy="100" rx="20" ry="5" fill="#64748b"/>
+  <ellipse cx="60" cy="99" rx="19" ry="4" fill="#cbd5e1"/>
+
+  <!-- Fluffy mound of rice (behind bowl front) -->
+  <path d="M 22 56 
+           C 20 42, 28 32, 42 26 
+           C 50 22, 70 22, 78 26 
+           C 92 32, 100 42, 98 56 
+           Z" 
+        fill="url(#riceMoundGrad)" stroke="#cbd5e1" stroke-width="1.8"/>
+
+  <!-- Fluffy rice bumps and textures -->
+  <circle cx="34" cy="40" r="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="46" cy="32" r="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="60" cy="28" r="9" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="74" cy="32" r="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="86" cy="40" r="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="42" cy="46" r="7.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="56" cy="42" r="8.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="70" cy="44" r="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="78" cy="48" r="7" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="32" cy="50" r="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Subtle rice grain details -->
+  <ellipse cx="48" cy="38" rx="3.5" ry="1.8" fill="#f1f5f9" transform="rotate(25 48 38)"/>
+  <ellipse cx="62" cy="35" rx="3.5" ry="1.8" fill="#f1f5f9" transform="rotate(-15 62 35)"/>
+  <ellipse cx="68" cy="40" rx="3.5" ry="1.8" fill="#f1f5f9" transform="rotate(40 68 40)"/>
+  <ellipse cx="54" cy="48" rx="3.5" ry="1.8" fill="#f1f5f9" transform="rotate(-30 54 48)"/>
+
+  <!-- Ceramic Bowl Body -->
+  <path d="M 16 54 C 18 86, 32 98, 60 98 C 88 98, 102 86, 104 54 Z" fill="url(#riceBowlGrad)" stroke="#475569" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Decorative blue ceramic rim stripe -->
+  <path d="M 18 60 C 26 84, 40 92, 60 92 C 80 92, 94 84, 102 60" fill="none" stroke="url(#blueStripe)" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- Bowl rim -->
+  <ellipse cx="60" cy="54" rx="44" ry="12" fill="none" stroke="#475569" stroke-width="2.5"/>
+
+  <!-- Rising hot steam -->
+  <path d="M 48 20 C 44 14, 50 10, 46 4" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+  <path d="M 60 18 C 64 12, 58 8, 62 2" fill="none" stroke="#94a3b8" stroke-width="2.4" stroke-linecap="round" opacity="0.5"/>
+  <path d="M 72 20 C 76 14, 70 10, 74 4" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" opacity="0.45"/>
+</svg>

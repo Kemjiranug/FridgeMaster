@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <ellipse cx="60" cy="102" rx="36" ry="6" fill="#00000014"/>
+  <rect x="16" y="34" width="88" height="58" rx="7" fill="#EAF1FA" stroke="#BFD6EE" stroke-width="2"/>
+  <rect x="21" y="39" width="30" height="24" rx="4" fill="#FFFFFF"/>
+  <rect x="54" y="39" width="33" height="24" rx="4" fill="#FFFFFF"/>
+  <rect x="21" y="66" width="66" height="21" rx="4" fill="#FFFFFF"/>
+  <!-- controlled-portion brown rice -->
+  <ellipse cx="35" cy="51" rx="11" ry="8" fill="#E4CBA0"/>
+  <!-- grilled fish -->
+  <ellipse cx="70" cy="51" rx="13" ry="8" fill="#D9A05B"/>
+  <path d="M60 51 h20 M64 47 v8 M72 47 v8" stroke="#B97F3F" stroke-width="1.4"/>
+  <!-- non-starchy veg -->
+  <circle cx="34" cy="76" r="6" fill="#4E9F55"/>
+  <circle cx="46" cy="79" r="5" fill="#4E9F55"/>
+  <circle cx="58" cy="75" r="6" fill="#6DBE72"/>
+  <circle cx="70" cy="78" r="5" fill="#4E9F55"/>
+  <rect x="14" y="29" width="92" height="8" rx="3" fill="#DEDACE"/>
+  <!-- diabetic badge: glucose drop -->
+  <circle cx="98" cy="30" r="15" fill="#FFFFFF" stroke="#4ea8de" stroke-width="2.5"/>
+  <path d="M98 20 C104 28 104 33 98 36 C92 33 92 28 98 20 Z" fill="#4ea8de"/>
+</svg>

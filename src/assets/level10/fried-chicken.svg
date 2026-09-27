@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="crustGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="45%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="boneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="plateGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(0, -6)">
+    <!-- Ground shadow -->
+    <ellipse cx="60" cy="106" rx="42" ry="7" fill="#0000001c"/>
+
+    <!-- Plate / Dish -->
+    <ellipse cx="60" cy="95" rx="46" ry="12" fill="url(#plateGrad)" stroke="#cbd5e1" stroke-width="2"/>
+    <ellipse cx="60" cy="94" rx="40" ry="9" fill="#f8fafc"/>
+
+    <!-- Background Chicken Pieces -->
+    <ellipse cx="44" cy="74" rx="20" ry="15" fill="#b45309"/>
+    <ellipse cx="78" cy="76" rx="18" ry="14" fill="#92400e"/>
+
+    <!-- Drumstick Bone -->
+    <path d="M 78 52 L 96 38" stroke="url(#boneGrad)" stroke-width="7" stroke-linecap="round"/>
+    <!-- Bone Knobs -->
+    <circle cx="96" cy="35" r="4.5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="101" cy="40" r="4.5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+
+    <!-- Main Crispy Drumstick Body -->
+    <path d="M 32 78 
+             C 24 64, 34 46, 52 48 
+             C 70 50, 84 56, 82 72 
+             C 80 86, 68 94, 50 94 
+             C 36 94, 34 86, 32 78 
+             Z" 
+          fill="url(#crustGrad)" stroke="#78350f" stroke-width="2.2" stroke-linejoin="round"/>
+
+    <!-- Crispy Breading Flakes & Crunch Details -->
+    <ellipse cx="46" cy="62" rx="5" ry="3" fill="#fef3c7" opacity="0.8"/>
+    <ellipse cx="62" cy="66" rx="6" ry="3.5" fill="#fef3c7" opacity="0.8"/>
+    <circle cx="38" cy="74" r="2.8" fill="#78350f" opacity="0.5"/>
+    <circle cx="56" cy="78" r="3.2" fill="#78350f" opacity="0.5"/>
+    <circle cx="70" cy="74" r="2.5" fill="#78350f" opacity="0.5"/>
+    <circle cx="48" cy="85" r="2.2" fill="#fef3c7"/>
+    <circle cx="65" cy="86" r="2.5" fill="#78350f" opacity="0.5"/>
+
+    <!-- Crunchy Edge bumps -->
+    <path d="M 36 56 Q 30 62 34 68 Q 28 75 34 82" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 52 92 Q 62 96 72 90" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Top Golden Glisten Highlight -->
+    <path d="M 45 54 C 54 52, 65 54, 72 58" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+</svg>

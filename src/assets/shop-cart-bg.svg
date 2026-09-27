@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220">
+  <!-- Soft shopping-cart watermark used behind The Fresh Market shop screen. -->
+  <g opacity="0.9">
+    <!-- basket -->
+    <path d="M46 60 H196 L176 132 H74 Z" fill="#bfe6d3"/>
+    <path d="M46 60 H196 L176 132 H74 Z" fill="none" stroke="#7fd3b4" stroke-width="5" stroke-linejoin="round"/>
+    <!-- basket lattice -->
+    <path d="M84 70 L96 122 M118 70 L122 122 M152 70 L148 122" stroke="#7fd3b4" stroke-width="3" opacity="0.6"/>
+    <!-- handle -->
+    <path d="M20 34 H46 L58 60" fill="none" stroke="#7fd3b4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- wheels -->
+    <circle cx="92" cy="158" r="14" fill="#f4de3b"/>
+    <circle cx="92" cy="158" r="14" fill="none" stroke="#d4bd1e" stroke-width="4"/>
+    <circle cx="160" cy="158" r="14" fill="#f4de3b"/>
+    <circle cx="160" cy="158" r="14" fill="none" stroke="#d4bd1e" stroke-width="4"/>
+    <!-- little food peeking out -->
+    <circle cx="90" cy="52" r="16" fill="#f0956b"/>
+    <circle cx="128" cy="46" r="18" fill="#7fd3b4"/>
+    <circle cx="164" cy="54" r="14" fill="#f4de3b"/>
+    <!-- sparkles -->
+    <path d="M204 24 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="#f4de3b"/>
+    <path d="M24 96 l2.4 6.4 6.4 2.4 -6.4 2.4 -2.4 6.4 -2.4 -6.4 -6.4 -2.4 6.4 -2.4 z" fill="#7fd3b4"/>
+  </g>
+</svg>

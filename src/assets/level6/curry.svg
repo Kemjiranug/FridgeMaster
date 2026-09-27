@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="bowlGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="curryGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="60%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="chiliGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Shadow -->
+  <ellipse cx="60" cy="106" rx="38" ry="7" fill="#00000018"/>
+
+  <!-- Bowl base -->
+  <ellipse cx="60" cy="98" rx="20" ry="5" fill="#94a3b8"/>
+  <ellipse cx="60" cy="97" rx="19" ry="4" fill="#cbd5e1"/>
+
+  <!-- Bowl exterior -->
+  <path d="M 14 54 C 16 88, 32 98, 60 98 C 88 98, 104 88, 106 54 Z" fill="url(#bowlGrad)" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Bowl rim -->
+  <ellipse cx="60" cy="54" rx="46" ry="14" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+  <ellipse cx="60" cy="53" rx="44" ry="13" fill="#f8fafc"/>
+
+  <!-- Curry broth -->
+  <ellipse cx="60" cy="55" rx="41" ry="11.5" fill="url(#curryGrad)"/>
+
+  <!-- Coconut milk swirl -->
+  <path d="M 44 54 C 50 51, 68 51, 74 55 C 72 58, 54 58, 48 56" fill="none" stroke="#fffbeb" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Meat / potato chunks -->
+  <ellipse cx="42" cy="54" rx="7" ry="5" fill="#f59e0b" stroke="#b45309" stroke-width="1.2"/>
+  <ellipse cx="76" cy="53" rx="8" ry="5" fill="#d97706" stroke="#92400e" stroke-width="1.2"/>
+  <ellipse cx="58" cy="58" rx="8" ry="5.5" fill="#f59e0b" stroke="#b45309" stroke-width="1.2"/>
+  <circle cx="34" cy="56" r="3.5" fill="#b45309"/>
+
+  <!-- Red chili slices -->
+  <path d="M 66 49 C 72 47, 76 51, 74 53" fill="none" stroke="url(#chiliGrad)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M 48 57 C 52 56, 56 59, 54 61" fill="none" stroke="url(#chiliGrad)" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- Sweet basil leaves (โหระพา) -->
+  <g transform="translate(56, 48) rotate(-15)">
+    <path d="M 0 0 C -4 -6, -2 -11, 4 -12 C 10 -11, 11 -6, 6 0 Z" fill="#15803d" stroke="#166534" stroke-width="1"/>
+    <path d="M 2 0 L 3 -10" stroke="#86efac" stroke-width="0.8"/>
+  </g>
+  <g transform="translate(68, 51) rotate(35)">
+    <path d="M 0 0 C -3 -5, -1 -9, 3 -10 C 8 -9, 9 -5, 5 0 Z" fill="#16a34a" stroke="#15803d" stroke-width="1"/>
+  </g>
+
+  <!-- Gentle steam -->
+  <path d="M 46 36 C 42 28, 48 22, 44 14" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 62 34 C 66 26, 58 20, 64 12" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.65"/>
+  <path d="M 76 37 C 80 30, 74 24, 78 16" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+</svg>

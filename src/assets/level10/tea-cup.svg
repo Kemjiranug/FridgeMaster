@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="teaSteam" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="50%" stop-color="#f8fafc" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cupGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="40%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="teaLiquid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="60%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <filter id="teaBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <!-- Ground shadow -->
+  <ellipse cx="60" cy="108" rx="36" ry="6" fill="#0000001c"/>
+
+  <!-- Saucer (จานรองถ้วย) -->
+  <ellipse cx="60" cy="102" rx="42" ry="9" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <ellipse cx="60" cy="101" rx="36" ry="6" fill="#bae6fd"/>
+
+  <!-- Cup Handle (หูถ้วย) -->
+  <path d="M 82 64 C 104 62, 102 90, 80 88" fill="none" stroke="#0369a1" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M 82 64 C 98 63, 98 88, 80 88" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Cup Body -->
+  <path d="M 30 58 
+           C 30 96, 40 100, 60 100 
+           C 80 100, 90 96, 90 58 
+           Z" 
+        fill="url(#cupGrad)" stroke="#0369a1" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Cup Rim & Tea Liquid Surface -->
+  <ellipse cx="60" cy="58" rx="30" ry="10" fill="#0369a1"/>
+  <ellipse cx="60" cy="58" rx="27" ry="8" fill="url(#teaLiquid)"/>
+  <ellipse cx="60" cy="58" rx="21" ry="5.5" fill="#f97316" opacity="0.6"/>
+
+  <!-- Cup Gloss Highlight -->
+  <path d="M 36 64 C 34 76, 38 88, 46 94 C 41 90, 38 78, 39 64 Z" fill="#ffffff" opacity="0.4"/>
+
+  <!-- Rising Steam (ควันลอย) -->
+  <g filter="url(#teaBlur)">
+    <path d="M 46 48 C 38 36, 52 26, 42 10 C 38 4, 44 2, 44 2" fill="none" stroke="url(#teaSteam)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 60 46 C 68 34, 52 22, 62 8 C 65 4, 61 2, 61 2" fill="none" stroke="url(#teaSteam)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 74 48 C 82 38, 68 26, 78 12 C 81 6, 77 2, 77 2" fill="none" stroke="url(#teaSteam)" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

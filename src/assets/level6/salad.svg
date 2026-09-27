@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="saladBowlGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="leafGrad1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4ade80"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="leafGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#86efac"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+    <linearGradient id="tomatoGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="40%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="60" cy="106" rx="38" ry="7" fill="#00000018"/>
+
+  <!-- Bowl base -->
+  <ellipse cx="60" cy="100" rx="20" ry="5" fill="#94a3b8"/>
+
+  <!-- Salad Greens (behind bowl rim) -->
+  <!-- Leaf 1 (Left) -->
+  <path d="M 24 52 C 16 38, 22 24, 38 28 C 42 22, 54 26, 52 38 Z" fill="url(#leafGrad1)" stroke="#15803d" stroke-width="1.5"/>
+  <!-- Leaf 2 (Back Center) -->
+  <path d="M 44 42 C 46 22, 60 18, 70 24 C 78 18, 88 28, 82 42 Z" fill="url(#leafGrad2)" stroke="#15803d" stroke-width="1.5"/>
+  <!-- Leaf 3 (Right) -->
+  <path d="M 72 46 C 86 28, 98 34, 94 48 C 102 54, 98 64, 88 62 Z" fill="url(#leafGrad1)" stroke="#15803d" stroke-width="1.5"/>
+
+  <!-- Bowl Body -->
+  <path d="M 16 54 C 18 86, 32 98, 60 98 C 88 98, 102 86, 104 54 Z" fill="url(#saladBowlGrad)" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- Bowl Rim -->
+  <ellipse cx="60" cy="54" rx="44" ry="13" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <ellipse cx="60" cy="53" rx="42" ry="12" fill="#f8fafc"/>
+
+  <!-- Foreground Salad Leaves inside bowl -->
+  <path d="M 28 56 C 24 46, 38 42, 48 48 C 54 44, 66 48, 62 58 Z" fill="url(#leafGrad2)" stroke="#16a34a" stroke-width="1.2"/>
+  <path d="M 52 56 C 56 46, 72 44, 78 52 C 84 48, 92 56, 86 64 Z" fill="url(#leafGrad1)" stroke="#15803d" stroke-width="1.2"/>
+  <path d="M 36 62 C 34 54, 50 52, 58 58 C 64 54, 76 60, 72 68 Z" fill="url(#leafGrad2)" stroke="#16a34a" stroke-width="1.2"/>
+
+  <!-- Cucumber slices -->
+  <g transform="translate(32, 50)">
+    <circle cx="10" cy="10" r="9" fill="#86efac" stroke="#15803d" stroke-width="2"/>
+    <circle cx="10" cy="10" r="6" fill="#bbf7d0"/>
+    <circle cx="8" cy="8" r="0.8" fill="#15803d"/>
+    <circle cx="12" cy="8" r="0.8" fill="#15803d"/>
+    <circle cx="10" cy="12" r="0.8" fill="#15803d"/>
+  </g>
+  <g transform="translate(68, 54)">
+    <circle cx="10" cy="10" r="9" fill="#86efac" stroke="#15803d" stroke-width="2"/>
+    <circle cx="10" cy="10" r="6" fill="#bbf7d0"/>
+  </g>
+
+  <!-- Cherry Tomato halves -->
+  <g transform="translate(48, 46)">
+    <circle cx="10" cy="10" r="9" fill="url(#tomatoGrad)" stroke="#991b1b" stroke-width="1.2"/>
+    <ellipse cx="8" cy="7" rx="3" ry="1.5" fill="#ffffff" opacity="0.6" transform="rotate(-30 8 7)"/>
+    <!-- Tiny green stem star -->
+    <path d="M 10 2 L 12 5 L 8 5 Z" fill="#15803d"/>
+  </g>
+  <g transform="translate(74, 44)">
+    <circle cx="8" cy="8" r="8" fill="url(#tomatoGrad)" stroke="#991b1b" stroke-width="1.2"/>
+    <ellipse cx="6" cy="6" rx="2.5" ry="1.2" fill="#ffffff" opacity="0.6" transform="rotate(-30 6 6)"/>
+  </g>
+
+  <!-- Purple cabbage shreds & Carrot curls -->
+  <path d="M 38 60 Q 46 64 54 58" fill="none" stroke="#a855f7" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M 64 62 Q 72 58 78 66" fill="none" stroke="#9333ea" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 44 54 Q 52 50 60 52" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 60 64 Q 68 68 74 62" fill="none" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <!-- Dressing pool gradient -->
+    <linearGradient id="dressingPool" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#ca8a04" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#a16207" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="bowlGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(0, -8)">
+    <!-- Ground shadow -->
+    <ellipse cx="60" cy="106" rx="42" ry="7" fill="#0000001c"/>
+
+    <!-- Salad Bowl Body -->
+    <path d="M 16 52 
+             C 16 88, 30 102, 60 102 
+             C 90 102, 104 88, 104 52 
+             Z" 
+          fill="url(#bowlGrad)" stroke="#64748b" stroke-width="2.5" stroke-linejoin="round"/>
+
+    <ellipse cx="60" cy="52" rx="44" ry="14" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+
+    <!-- Murky Soggy Dressing Liquid Pool in bowl (น้ำสลัดแฉะนอง) -->
+    <ellipse cx="60" cy="58" rx="40" ry="12" fill="url(#dressingPool)"/>
+
+    <!-- Oil droplets floating on separated soggy dressing -->
+    <ellipse cx="40" cy="56" rx="6" ry="2.5" fill="#facc15" opacity="0.6"/>
+    <ellipse cx="78" cy="58" rx="5" ry="2" fill="#facc15" opacity="0.6"/>
+    <ellipse cx="58" cy="62" rx="7" ry="2.8" fill="#facc15" opacity="0.6"/>
+
+    <!-- Limp, wilted, translucent greens drowning in dressing -->
+    <!-- Wilted dark green/olive leaf 1 -->
+    <path d="M 28 54 C 36 44, 52 48, 54 58 C 42 64, 30 62, 28 54 Z" fill="#4d7c0f" stroke="#365314" stroke-width="1.2"/>
+    <path d="M 32 50 C 38 46, 46 50, 48 56" fill="none" stroke="#a3e635" stroke-width="1" opacity="0.6"/>
+
+    <!-- Collapsed, soggy lettuce leaf 2 (yellowish brown edge) -->
+    <path d="M 44 48 C 56 38, 74 44, 76 56 C 62 62, 48 60, 44 48 Z" fill="#65a30d" stroke="#3f6212" stroke-width="1.2"/>
+    <path d="M 68 44 C 74 46, 78 52, 74 58" fill="none" stroke="#ca8a04" stroke-width="1.8"/>
+
+    <!-- Wilted leaf 3 drooping over right rim -->
+    <path d="M 66 52 C 78 44, 94 48, 92 64 C 84 68, 72 64, 66 52 Z" fill="#3f6212" stroke="#1a2e05" stroke-width="1.2"/>
+
+    <!-- Drooping, slippery tomato slice drowning in sauce -->
+    <ellipse cx="48" cy="64" rx="10" ry="6" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.2"/>
+    <ellipse cx="48" cy="64" rx="7" ry="4" fill="#dc2626"/>
+    <circle cx="46" cy="63" r="1.5" fill="#fef08a"/>
+    <circle cx="50" cy="65" r="1.5" fill="#fef08a"/>
+
+    <!-- Limp, wet cucumber slice soaked through -->
+    <ellipse cx="72" cy="65" rx="8" ry="5" fill="#65a30d" stroke="#365314" stroke-width="1.2"/>
+    <ellipse cx="72" cy="65" rx="6" ry="3.5" fill="#bef264" opacity="0.75"/>
+
+    <!-- Oily wet gloss over the soggy salad -->
+    <path d="M 38 52 Q 54 46 72 50" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+    <path d="M 46 60 Q 60 56 76 60" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Dressing drip running down outside of the bowl (แฉะจนล้น) -->
+    <path d="M 88 56 C 88 64, 92 68, 92 74 C 92 78, 88 80, 88 80" fill="none" stroke="#ca8a04" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="88" cy="81" r="2.5" fill="#ca8a04" opacity="0.85"/>
+  </g>
+</svg>
