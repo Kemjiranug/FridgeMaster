@@ -1585,7 +1585,7 @@ function Auth({ mode, onAuthed, onSwitch }) {
       <main className="auth">
         <div className="auth-card">
           <h1 className="auth-title">Fridge Fresh</h1>
-          <p className="auth-sub">Stock your shelves and get sorting!</p>
+          <p className="auth-sub">เริ่มเล่นฟริดจ์มาสเตอร์กันเถอะ</p>
 
           <label className="auth-label">Player Name</label>
           <div className="auth-field">
@@ -1699,7 +1699,7 @@ function Auth({ mode, onAuthed, onSwitch }) {
       <div className="auth-card">
         <h1 className="auth-title auth-title--plain">Log In</h1>
         <p className="auth-sub" style={{ margin: '-14px 0 20px', fontSize: '14px', lineHeight: 1.4 }}>
-          Stock your shelves and get sorting!
+          เริ่มเล่นฟริดจ์มาสเตอร์กันเถอะ
         </p>
 
         <label className="auth-label">Email</label>
