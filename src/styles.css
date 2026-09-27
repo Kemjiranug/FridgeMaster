@@ -216,9 +216,19 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .field-ico { width: 26px; height: 26px; border-radius: 50%; background: #e2f3ea; display: grid; place-items: center; flex: none; }
 .auth-field input { border: none; outline: none; flex: 1; min-width: 0; font-family: inherit; font-size: 15px; font-weight: 600; color: var(--ink); background: transparent; }
 .auth-field input::placeholder { color: #9aa4ab; font-weight: 500; }
-.auth-btn { width: 100%; margin-top: 24px; padding: 14px; font-size: 17px; border-radius: 26px; }
-.auth-forgot { background: none; color: var(--green-dark); font-weight: 800; font-size: 14px; margin: 16px auto 0; }
-.auth-or { text-align: center; color: var(--muted); font-weight: 700; margin: 8px 0; }
+.auth-forgot {
+  background: none;
+  border: none;
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color .15s ease;
+}
+.auth-forgot:hover { color: var(--teal); }
 .auth-create {
   background: #fff; border: 2px solid #dfe4e7; color: var(--green-dark); font-weight: 800; font-size: 14px;
   border-radius: 24px; padding: 10px 22px; margin: 0 auto;

@@ -236,26 +236,25 @@ export default function App() {
   // ----- Real Supabase auth (session-backed, replaces the old UI-only gate) -----
   const [session, setSession] = useState(null)
   const [authLoading, setAuthLoading] = useState(true)
-  const [authMode, setAuthMode] = useState('login') // 'login' | 'signup'
+  const [authMode, setAuthMode] = useState('login') // 'login' | 'signup' | 'forgot'
+  const [isRecoveringPassword, setIsRecoveringPassword] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       setAuthLoading(false)
 
-      // มีเลเวลที่เล่นค้างไว้ของ user คนนี้ไหม? (ปิดแอปกะทันหันแล้วเปิดใหม่ —
-      // อาจเป็นเครื่องเดิมหรือเครื่องอื่นก็ได้) เทียบทั้ง local (เครื่องนี้)
-      // กับ remote (Supabase, ข้ามเครื่อง) แล้วใช้อันที่ใหม่กว่า แทนที่จะโยน
-      // เข้าเกมพร้อมนับเวลาถอยหลังทันที ให้หยุดไว้ที่หน้า Pause ก่อน ให้
-      // ผู้เล่นเป็นคนตัดสินใจเองว่าจะเล่นต่อ/เริ่มใหม่/กลับเมนู
       const userId = session?.user?.id ?? null
       const localSnap = loadSnapshot(userId)
       const remoteSnap = await pullSnapshotRemote(userId)
       const snap = pickFreshestSnapshot(localSnap, remoteSnap)
       if (snap) resumeFromSnapshot(snap, { paused: true })
     })
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, newSession) => {
       setSession(newSession)
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecoveringPassword(true)
+      }
     })
     return () => listener.subscription.unsubscribe()
   }, [])
@@ -921,6 +920,16 @@ export default function App() {
 
   // Gate the whole game behind the login / sign-up screen (real Supabase session).
   if (authLoading) return null
+  if (isRecoveringPassword) {
+    return (
+      <div className="app">
+        <Header inGame={false} title="Fridge Master" onHome={() => setIsRecoveringPassword(false)} onSettings={() => {}} onHelp={() => {}} />
+        <div className="page">
+          <Auth mode="update-password" onAuthed={() => setIsRecoveringPassword(false)} onSwitch={() => setIsRecoveringPassword(false)} />
+        </div>
+      </div>
+    )
+  }
   if (!session) {
     return (
       <div className="app">
@@ -1546,6 +1555,31 @@ function Auth({ mode, onAuthed, onSwitch }) {
     onAuthed?.(data.session)
   }
 
+  const handleResetPassword = async () => {
+    setError(''); setNotice('')
+    if (!email) { setError('Enter your email address.'); return }
+    setLoading(true)
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    })
+    setLoading(false)
+    if (resetError) { setError(resetError.message); return }
+    setNotice('Password reset link sent! Check your email inbox.')
+  }
+
+  const handleUpdatePassword = async () => {
+    setError(''); setNotice('')
+    if (!password || password.length < 6) { setError('Password must be at least 6 characters.'); return }
+    setLoading(true)
+    const { error: updateError } = await supabase.auth.updateUser({ password })
+    setLoading(false)
+    if (updateError) { setError(updateError.message); return }
+    setNotice('Password updated successfully!')
+    setTimeout(() => {
+      onAuthed?.(null)
+    }, 1500)
+  }
+
   if (mode === 'signup') {
     return (
       <main className="auth">
@@ -1595,6 +1629,71 @@ function Auth({ mode, onAuthed, onSwitch }) {
     )
   }
 
+  if (mode === 'forgot') {
+    return (
+      <main className="auth">
+        <div className="auth-card">
+          <h1 className="auth-title auth-title--plain">Reset Password</h1>
+          <p className="auth-sub" style={{ margin: '-10px 0 20px', fontSize: '14px', lineHeight: 1.4 }}>
+            Enter your account email and we'll send you a password reset link.
+          </p>
+
+          <label className="auth-label">Email</label>
+          <div className="auth-field">
+            <span className="field-ico"><UserGlyph /></span>
+            <input
+              type="email" placeholder="you@gmail.com" autoComplete="email"
+              value={email} onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          {error && <p className="auth-error">{error}</p>}
+          {notice && <p className="auth-notice">{notice}</p>}
+
+          <button className="btn btn-play auth-btn" type="button" disabled={loading} onClick={handleResetPassword}>
+            {loading ? 'Sending link…' : 'Send Reset Link'}
+          </button>
+
+          <p className="auth-switch">
+            Remember your password?{' '}
+            <button type="button" className="auth-link" onClick={() => { setError(''); setNotice(''); onSwitch('login') }}>
+              Log in here →
+            </button>
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  if (mode === 'update-password') {
+    return (
+      <main className="auth">
+        <div className="auth-card">
+          <h1 className="auth-title auth-title--plain">Set New Password</h1>
+          <p className="auth-sub" style={{ margin: '-10px 0 20px', fontSize: '14px', lineHeight: 1.4 }}>
+            Enter your new password below (at least 6 characters).
+          </p>
+
+          <label className="auth-label">New Password</label>
+          <div className="auth-field">
+            <span className="field-ico"><LockGlyph /></span>
+            <input
+              type="password" placeholder="New password" autoComplete="new-password"
+              value={password} onChange={(e) => setPassword(e.target.value)} minLength={6}
+            />
+          </div>
+
+          {error && <p className="auth-error">{error}</p>}
+          {notice && <p className="auth-notice">{notice}</p>}
+
+          <button className="btn btn-play auth-btn" type="button" disabled={loading} onClick={handleUpdatePassword}>
+            {loading ? 'Saving…' : 'Update Password'}
+          </button>
+        </div>
+      </main>
+    )
+  }
+
   return (
     <main className="auth">
       <div className="auth-card">
@@ -1609,7 +1708,12 @@ function Auth({ mode, onAuthed, onSwitch }) {
           />
         </div>
 
-        <label className="auth-label">Password</label>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '14px', marginBottom: '6px' }}>
+          <label className="auth-label" style={{ margin: 0 }}>Password</label>
+          <button type="button" className="auth-forgot" onClick={() => { setError(''); setNotice(''); onSwitch('forgot') }}>
+            Forgot password?
+          </button>
+        </div>
         <div className="auth-field">
           <span className="field-ico"><LockGlyph /></span>
           <input
