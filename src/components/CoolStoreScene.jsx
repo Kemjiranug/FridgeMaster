@@ -105,6 +105,23 @@ export default function CoolStoreScene({ placements, reveal, hintShelfId, onPlac
   const [overBox, setOverBox] = useState({ a: false, b: false })
   const [overZone, setOverZone] = useState(false)
 
+  const stored = {
+    a: placements['l20-store-a'] === 'done-store-a',
+    b: placements['l20-store-b'] === 'done-store-b',
+  }
+  const bothStored = stored.a && stored.b
+
+  useEffect(() => {
+    if (!stored.a && !stored.b) {
+      setPot({ a: { poured: false }, b: { poured: false } })
+      setCovered({ a: false, b: false })
+      setPicked(null)
+      setDrag(null)
+      setOverBox({ a: false, b: false })
+      setOverZone(false)
+    }
+  }, [stored.a, stored.b])
+
   const boxRefA = useRef(null)
   const boxRefB = useRef(null)
   const boxRefs = { a: boxRefA, b: boxRefB }
@@ -112,12 +129,6 @@ export default function CoolStoreScene({ placements, reveal, hintShelfId, onPlac
   const msgTimer = useRef(null)
   const gesture = useRef(null)
   const latest = useRef({})
-
-  const stored = {
-    a: placements['l20-store-a'] === 'done-store-a',
-    b: placements['l20-store-b'] === 'done-store-b',
-  }
-  const bothStored = stored.a && stored.b
   latest.current = { pot, covered, stored, reveal, onPlace }
 
   const flash = useCallback((text) => {

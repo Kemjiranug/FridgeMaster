@@ -53,6 +53,15 @@ export default function LeakScene({ placements, reveal, hintShelfId, onPlace }) 
   const [picked, setPicked] = useState(null) // tap-to-use fallback: 'chicken' | 'cloth'
   const [msg, setMsg] = useState('')
 
+  useEffect(() => {
+    if (!cleanedFlag) {
+      setStains(STAINS.map((s) => ({ ...s, clean: 0 })))
+      setPicked(null)
+      setDrag(null)
+      setOverBox(false)
+    }
+  }, [cleanedFlag])
+
   const boxRef = useRef(null)
   const innerRef = useRef(null) // full-size fridge photo box (for % → px)
   const msgTimer = useRef(null)

@@ -201,6 +201,7 @@ export default function App() {
   // right after finishSceneLevel() cleared it, and the finished level would
   // pop up as "resume where you left off" next time.
   const [sceneFinished, setSceneFinished] = useState(false)
+  const [playSessionKey, setPlaySessionKey] = useState(0)
   const [settings, setSettings] = useState({
     music: 80, sfx: 65, tutorial: true, language: 'English',
   })
@@ -411,6 +412,7 @@ export default function App() {
     // instead of the outer fridge they'd have to re-tap through.
     setShelfZoomed(Object.values(snap.placements || {}).some(Boolean))
     setSceneFinished(false)
+    setPlaySessionKey((k) => k + 1)
     setRunning(true)
     setPaused(paused)
     setScreen('game')
@@ -721,6 +723,7 @@ export default function App() {
     setFreeHints(0)
     setResult(null)
     setSceneFinished(false)
+    setPlaySessionKey((k) => k + 1)
     setPaused(paused)
     setRunning(true)
     setHintsUsed(0)
@@ -1121,6 +1124,7 @@ export default function App() {
             ) : currentLayout === 'leak' ? (
             <div className="board board--leak">
               <LeakScene
+                key={`leak-${level}-${playSessionKey}`}
                 placements={placements}
                 reveal={revealBoard}
                 hintShelfId={hintShelfId}
@@ -1130,6 +1134,7 @@ export default function App() {
             ) : currentLayout === 'coolstore' ? (
             <div className="board board--coolstore">
               <CoolStoreScene
+                key={`coolstore-${level}-${playSessionKey}`}
                 placements={placements}
                 reveal={revealBoard}
                 hintShelfId={hintShelfId}
@@ -1220,6 +1225,7 @@ export default function App() {
             ) : currentLayout === 'coldemergency' ? (
             <div className="board board--coldemergency">
               <ColdEmergencyScene
+                key={`coldemergency-${level}-${playSessionKey}`}
                 items={currentItems}
                 placements={placements}
                 reveal={revealBoard}
