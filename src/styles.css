@@ -184,10 +184,32 @@ button { font-family: inherit; cursor: pointer; border: none; }
 
 .profile-section-head { text-align: center; color: var(--green-dark); font-size: 20px; font-weight: 900; margin: 6px 0 14px; }
 
-.profile-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
-.profile-badge { text-align: center; }
+.profile-badges {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.profile-badge {
+  text-align: center;
+  min-width: 90px;
+  max-width: 120px;
+}
 .profile-badge-medal { font-size: 56px; line-height: 1; filter: drop-shadow(0 3px 4px rgba(0,0,0,.15)); }
 .profile-badge-name { color: var(--ink); font-weight: 700; font-size: 13px; margin-top: 4px; }
+.profile-badge.is-locked .profile-badge-medal { filter: none; opacity: .35; }
+.profile-badge.is-locked .profile-badge-name { color: var(--muted); }
+.profile-badge-goal { color: var(--muted); font-weight: 600; font-size: 11px; margin-top: 2px; }
+.profile-no-badges {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  margin: 6px 0 16px;
+  width: 100%;
+}
 
 .profile-back { display: block; margin: 26px auto 0; }
 .profile-logout {
@@ -348,6 +370,20 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .story-caption { color: var(--muted); font-weight: 600; font-size: 15px; line-height: 1.6; max-width: 400px; margin: 0 auto 28px; }
 .story-caption strong { color: var(--green-dark); display: inline-block; margin-top: 2px; }
 .story-start { width: 100%; }
+/* Level 34's 2-beat intro (setting → the fridge with today's stock) */
+.story-setting {
+  display: inline-block; font-size: 11px; font-weight: 900; letter-spacing: .4px;
+  color: var(--green-dark); background: var(--mint); border: 1px solid var(--mint-line);
+  border-radius: 999px; padding: 4px 12px; margin-bottom: 14px;
+}
+.story-stocklist { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 0 0 26px; }
+.story-stockchip {
+  font-size: 13px; font-weight: 800; color: var(--green-deep); background: var(--mint);
+  border: 1px solid var(--mint-line); border-radius: 999px; padding: 6px 12px;
+}
+.story-dots { display: flex; gap: 6px; justify-content: center; margin-top: 16px; }
+.story-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--mint-line); }
+.story-dot.is-active { background: var(--teal); }
 @media (max-width: 560px) {
   .story-card { padding: 26px 24px 30px; border-radius: 26px; }
   .story-title { font-size: 26px; }
@@ -470,13 +506,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .board--fix { grid-template-columns: 1fr; justify-items: center; }
 .board--fix .fridge-scene { max-width: 520px; }
 .board--queue { display: flex; flex-direction: column; gap: 22px; padding: 16px 24px 10px; }
-/* Level 35 (Audit): no side tray either — AuditScene lays itself out
-   internally (fridge + log side panel), so give it the full board width
-   instead of getting squeezed into the left "fridge" column of the
-/* Expand page width specifically for Level 35 audit scene */
+/* Level 35 (Audit): no side tray — AuditScene lays itself out
+   internally (fridge + log side panel), so give it generous board width. */
 .page:has(.board--audit),
-.page--audit { max-width: 1560px; width: 96vw; }
+.page--audit { max-width: 1260px; width: 100%; margin: 0 auto; }
 .board--audit { grid-template-columns: 1fr; justify-items: center; padding: 12px 6px 10px; width: 100%; max-width: 100%; }
+
 
 /* ---------- Fridge (real illustration + drop zones) ---------- */
 .fridge-scene { display: flex; justify-content: center; }
@@ -1122,6 +1157,100 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .win-coins-label { color: var(--muted); font-weight: 700; font-size: 13px; }
 .win-coins-val { color: var(--green-dark); font-weight: 900; font-size: 24px; line-height: 1.1; }
 
+/* ----- Milestone Title Unlock Banner on LevelCompleteCard ----- */
+.win-promo-banner {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #fcd34d;
+  border-radius: 18px;
+  padding: 12px 18px;
+  margin: 6px 0 12px;
+  text-align: left;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+  animation: pulsePromoBanner 2s infinite ease-in-out;
+}
+
+@keyframes pulsePromoBanner {
+  0%, 100% {
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+    border-color: #fcd34d;
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+    border-color: #f59e0b;
+  }
+}
+
+.win-promo-emoji {
+  font-size: 34px;
+  flex-shrink: 0;
+}
+
+.win-promo-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.win-promo-tag {
+  font-size: 11px;
+  font-weight: 900;
+  color: #b45309;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.win-promo-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #78350f;
+  line-height: 1.2;
+}
+
+.win-promo-sub {
+  font-size: 11px;
+  font-weight: 700;
+  color: #92400e;
+}
+
+/* ----- Badge promotion popup (level 15 / 25 / 35 passed) ----- */
+.promo-card {
+  position: relative; overflow: hidden;
+  background: #fff; border-radius: 30px; padding: 34px 30px 30px; text-align: center;
+  box-shadow: var(--shadow-lg); width: 440px; max-width: 92vw;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+
+.promo-ribbon {
+  position: relative; z-index: 1; background: var(--orange); color: #fff;
+  font-weight: 900; font-size: 13px; letter-spacing: 1px; border-radius: 999px;
+  padding: 8px 18px; box-shadow: 0 4px 0 rgba(0,0,0,.12); margin-bottom: 6px;
+}
+.promo-lead { position: relative; z-index: 1; color: var(--muted); font-weight: 700; margin: 4px 0 0; }
+.promo-title {
+  position: relative; z-index: 1; color: var(--green-dark); font-weight: 900;
+  font-size: 30px; margin: 0 0 6px; line-height: 1.2;
+}
+.promo-medal { position: relative; z-index: 1; width: 130px; height: 130px; margin: 6px 0 4px; display: grid; place-items: center; }
+.promo-medal-emoji {
+  font-size: 72px; display: grid; place-items: center; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 40%, #fff7dc 0%, #ffe9a3 60%, #f4c948 100%);
+  border-radius: 50%; box-shadow: inset 0 0 0 4px #f0bd2e, 0 8px 18px rgba(210,180,20,.35);
+}
+.promo-sparkle { position: absolute; font-size: 20px; animation: pop .4s ease; }
+.promo-sparkle--1 { top: -6px; left: -10px; }
+.promo-sparkle--2 { bottom: 4px; left: -16px; font-size: 16px; }
+.promo-sparkle--3 { top: 10px; right: -14px; font-size: 18px; }
+.promo-sub {
+  position: relative; z-index: 1; background: #f4f0e4; border-radius: 16px;
+  padding: 12px 16px; color: var(--ink); font-weight: 600; font-size: 14px; line-height: 1.4;
+  margin: 8px 0 6px;
+}
+.promo-continue { position: relative; z-index: 1; width: 100%; padding: 16px 20px; margin-top: 6px; }
+
 /* Pause specifics */
 .pause-card { gap: 12px; }
 .resume-choice-row { display: flex; gap: 12px; margin-top: 4px; }
@@ -1475,7 +1604,40 @@ button { font-family: inherit; cursor: pointer; border: none; }
   .btn-check { flex: 1 1 100%; order: 3; }
 }
 /* ---------- Level 35: HACCP Audit scene ---------- */
-.audit-scene { width: 100%; max-width: 1520px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+body.has-hospital-bg {
+  background-image:
+    linear-gradient(rgba(255, 252, 244, 0.70), rgba(255, 252, 244, 0.70)),
+    var(--hospital-bg-img, url('./assets/level35/hospital-bg.png')) !important;
+  background-size: cover !important;
+  background-position: center bottom !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+  background-color: #fcf8ee !important;
+}
+
+body.has-hospital-bg .hud-level {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(40, 60, 50, 0.08);
+}
+
+body.has-hospital-bg .audit-stage-banner,
+body.has-hospital-bg .audit-round-prompt {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 18px rgba(40,60,50,.14);
+}
+
+body.has-hospital-bg .audit-header {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(234, 247, 241, 0.96) 130%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 20px rgba(40, 60, 50, 0.14);
+}
+
+.audit-scene { width: 100%; max-width: 1220px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 .audit-header {
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;
   background: linear-gradient(135deg, #fff 0%, var(--mint) 130%);
@@ -1483,24 +1645,117 @@ button { font-family: inherit; cursor: pointer; border: none; }
 }
 .audit-location-name { font-weight: 900; font-size: 18px; color: var(--green-dark); }
 .audit-location-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
-.audit-progress-block { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.audit-progress { font-weight: 800; font-size: 15px; color: var(--ink); white-space: nowrap; }
-.audit-progress-bar { width: 160px; margin-top: 0; }
+
+/* ---------- Level 35: Single Long Tube Progress Meter ---------- */
+.audit-tube-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 260px;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.audit-tube-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.audit-tube-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.audit-tube-step.is-active {
+  color: #0f766e;
+  font-weight: 900;
+}
+
+.audit-tube-step.is-done {
+  color: #059669;
+  font-weight: 900;
+}
+
+.audit-tube-step-check {
+  font-size: 11px;
+  color: #059669;
+  font-weight: 900;
+}
+
+.audit-long-tube {
+  position: relative;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.audit-long-tube-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #10b981 0%, #0d9488 65%, #14b8a6 100%);
+  box-shadow: 0 0 10px rgba(13, 148, 136, 0.55);
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.audit-tube-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.audit-tube-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 2;
+  transition: background 0.2s ease;
+}
+
+.audit-tube-tick.tick-1 {
+  left: 33.33%;
+}
+
+.audit-tube-tick.tick-2 {
+  left: 66.66%;
+}
+
+.audit-tube-tick.is-passed {
+  background: rgba(255, 255, 255, 0.95);
+}
 
 /* Fridge on one side, the Corrective Action Log on the other — a real
    two-column "audit desk" layout on wide screens; stacks vertically on
    narrow ones so the log still reads top-to-bottom under the fridge. */
-.audit-body { display: flex; align-items: flex-start; gap: 16px; width: 100%; }
+.audit-body { display: flex; align-items: flex-start; justify-content: center; gap: 16px; width: 100%; }
 
 /* The big fridge photo the audit grid now lives inside of. The interior
    panel is positioned as a % box over the open compartments of
    fridge-audit.png and scrolls independently so all 25 tiles fit without
    resizing the photo. */
 .audit-fridge-frame {
-  position: relative; flex: 1 1 82%; min-width: 0;
-  border-radius: 18px; overflow: hidden;
+  position: relative; flex: 1 1 auto; max-width: 1020px; min-width: 0;
+  border-radius: 18px; overflow: visible;
 }
-.audit-fridge-img { display: block; width: 100%; height: auto; }
+.audit-fridge-img {
+  display: block; width: 100%; height: auto;
+  filter: drop-shadow(0 14px 28px rgba(30, 50, 40, 0.22));
+}
 /* No grid anymore — every tile is pinned to a hand-placed % position that
    lines up with an actual shelf in fridge-audit.png (see SLOTS in
    AuditScene.jsx), so items sit ON the shelves like they would in a real
@@ -1569,12 +1824,60 @@ button { font-family: inherit; cursor: pointer; border: none; }
   background: var(--mint); border-radius: 10px; padding: 14px; text-align: center;
 }
 
+/* Compact side panel for Round 1 (Flagged count + Check Round button) */
+.audit-side--r1 {
+  flex: 0 0 168px;
+  min-width: 155px;
+  max-width: 180px;
+  position: sticky;
+  top: 14px;
+}
+.audit-log--r1 {
+  padding: 12px 14px 14px;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(40,60,50,.12);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.audit-log--r1 .audit-log-title {
+  font-size: 13.5px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  text-align: center;
+}
+.audit-r1-check-btn,
+.audit-log--r1 .btn-play {
+  width: 100%;
+  padding: 9px 10px;
+  font-size: 13.5px;
+  font-weight: 900;
+  border-radius: 12px;
+  box-shadow: 0 4px 0 var(--yellow-shadow), 0 6px 14px rgba(150,130,10,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  box-sizing: border-box;
+}
+.audit-log--r1 .audit-log-empty {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 8px;
+  margin-top: 6px;
+  text-align: center;
+}
+
 @media (max-width: 760px) {
-  .audit-body { flex-direction: column; }
+  .audit-body { flex-direction: column; align-items: center; }
   .audit-fridge-frame { flex: 1 1 auto; width: 100%; }
-  .audit-side { position: static; width: 100%; max-width: none; }
-  .audit-progress-block { align-items: flex-start; }
-  .audit-progress-bar { width: 100%; }
+  .audit-side, .audit-side--r1 { position: static; width: 100%; max-width: none; }
+  .audit-tube-meter { width: 100%; }
+  .audit-stage-banner { border-radius: 16px; padding: 10px 16px; flex-direction: column; text-align: center; gap: 6px; width: 100%; }
+  .audit-stage-text { flex-direction: column; gap: 2px; }
 }
 
 .audit-wizard {
@@ -6191,10 +6494,12 @@ button { font-family: inherit; cursor: pointer; border: none; }
   display: flex;
   flex: 1;
   justify-content: center;
-  align-items: center;
-  padding: 10px 16px;
+  align-items: flex-start;
+  padding: 24px 16px 20px;
   width: 100%;
   min-height: 56vh;
+  background: transparent;
+  border-radius: 20px;
 }
 
 .ce-wrap {
@@ -6204,9 +6509,230 @@ button { font-family: inherit; cursor: pointer; border: none; }
   align-items: center;
   gap: 16px;
   width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 0 66px;
+  max-width: 680px;
+  margin: 12px auto 0;
+  padding: 0 54px;
+}
+
+.ce-wrap.is-step1 {
+  max-width: 680px;
+  padding: 0 16px;
+  gap: 14px;
+}
+
+/* ----- Step 1 Figma Design (Level 34) ----- */
+.ce-step1-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 8px;
+}
+
+.ce-step1-fridge-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 460px;
+}
+
+.ce-step1-glow {
+  display: none !important;
+}
+
+.ce-step1-fridge-img {
+  position: relative;
+  z-index: 2;
+  width: 440px;
+  max-width: 98%;
+  height: 480px;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.16));
+}
+
+.ce-step1-card {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 620px;
+  margin-top: -110px;
+  background: #ffffff;
+  border: 1.5px solid #a3e8d9;
+  border-radius: 24px;
+  padding: 22px 28px 22px;
+  box-shadow: 0 12px 32px rgba(1, 108, 88, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ce-step1-card.is-correct {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 12px 32px rgba(16, 185, 129, 0.12);
+}
+
+.ce-step1-card.is-wrong {
+  border-color: #e4573b;
+  box-shadow: 0 0 0 3px rgba(228, 87, 59, 0.2), 0 12px 32px rgba(228, 87, 59, 0.12);
+}
+
+.ce-step1-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #016c58;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.ce-step1-sub {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #0d7460;
+  margin: 0 0 18px 0;
+  line-height: 1.45;
+}
+
+.ce-step1-options {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.ce-step1-btn {
+  border-radius: 9999px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #dbf7f0;
+  border: 1.5px solid #79d7be;
+  color: #016c58;
+  transition: all 0.15s ease;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  white-space: nowrap;
+}
+
+.ce-step1-btn:hover {
+  background: #cdfaee;
+  border-color: #56c9ad;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(1, 108, 88, 0.1);
+}
+
+.ce-step1-btn:active {
+  transform: translateY(1px);
+}
+
+.ce-step1-btn.is-selected {
+  background: #79d7be;
+  border-color: #3eb598;
+  color: #014639;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(1, 108, 88, 0.2);
+}
+
+.ce-step1-btn.is-correct {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.ce-step1-btn.is-wrong {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #991b1b;
+}
+
+.ce-step1-warning {
+  margin-top: 14px;
+  width: 100%;
+  font-size: 13px;
+  text-align: left;
+}
+
+.ce-step1-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.ce-step1-log-btn {
+  background: #f0fdfa;
+  border: 1.5px solid #99f6e4;
+  color: #0f766e;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ce-step1-log-btn:hover {
+  background: #ccfbf1;
+  border-color: #5eead4;
+}
+
+.ce-step1-next-btn {
+  margin-left: auto;
+  background: #016c58;
+  color: #ffffff;
+  border-radius: 9999px;
+  padding: 9px 22px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #004d3e;
+  transition: all 0.15s ease;
+}
+
+.ce-step1-next-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.ce-step1-next-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #004d3e;
+}
+
+@media (max-width: 580px) {
+  .ce-step1-card {
+    padding: 18px 18px 16px;
+    margin-top: -80px;
+  }
+  .ce-step1-options {
+    gap: 8px;
+  }
+  .ce-step1-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .ce-step1-fridge-area {
+    height: 270px;
+  }
+  .ce-step1-fridge-img {
+    width: 230px;
+    height: 270px;
+  }
+  .ce-step1-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ce-step1-next-btn {
+    margin-left: 0;
+  }
 }
 
 .ce-arrow {
@@ -6247,6 +6773,13 @@ button { font-family: inherit; cursor: pointer; border: none; }
 }
 .ce-card.is-correct { box-shadow: 0 0 0 3px #10b981, 0 10px 30px rgba(16, 185, 129, 0.15); }
 .ce-card.is-wrong { box-shadow: 0 0 0 3px #e4573b, 0 10px 30px rgba(228, 87, 34, 0.15); }
+.ce-card.is-stage-move {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  gap: 10px;
+}
 
 .ce-mark {
   position: absolute;
@@ -6338,63 +6871,455 @@ button { font-family: inherit; cursor: pointer; border: none; }
 .ce-foodchip-icon { font-size: 14px; }
 .ce-foodchip.is-small { padding: 4px 6px; font-size: 15px; }
 
-/* Move stage: three destination zones */
-.ce-foodrow-pending { margin-bottom: 2px; }
-.ce-movezones { display: flex; gap: 8px; }
-.ce-movezone {
-  flex: 1;
+/* ----- Step 2 Real Fridge & Move Panel ----- */
+.ce-move-interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.ce-move-real-fridge {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(44, 55, 66, 0.14), 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 3px solid #cbd5e1;
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.ce-move-real-fridge.is-drop-target {
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3.5px rgba(13, 148, 136, 0.3);
+}
+
+.ce-move-fridge-photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.ce-move-fridge-topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.ce-move-fridge-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.ce-move-fridge-badge.is-broken {
+  color: #b91c1c;
+}
+
+.ce-move-fridge-counter {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.ce-move-fridge-shelves {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 18px 8px 0;
+}
+
+.ce-move-shelf {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.ce-shelf-bar {
+  display: none;
+}
+
+.ce-shelf-label {
+  display: none;
+}
+
+.ce-shelf-items {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 68px;
+}
+
+.ce-real-food {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  border-radius: 12px;
-  padding: 8px 4px;
-  min-height: 56px;
+  gap: 3px;
+  padding: 7px 12px;
   background: #ffffff;
-  border: 1.5px dashed #cbd5e1;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  cursor: grab;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  user-select: none;
 }
-.ce-movezone-backup { border-color: #38bdf8; background: #f0f9ff; }
-.ce-movezone-coldbox { border-color: #fbbf24; background: #fffbeb; }
-.ce-movezone-left { border-color: #f87171; background: #fef2f2; }
-.ce-movezone-label { font-size: 10px; font-weight: 900; color: #334155; text-align: center; }
-.ce-movezone-items { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; min-height: 22px; }
 
-/* Protect stage: sealed / open fridge box */
+.ce-real-food:hover {
+  transform: translateY(-2px);
+  border-color: #0f766e;
+  box-shadow: 0 5px 12px rgba(15, 118, 110, 0.18);
+}
+
+.ce-real-food:active {
+  cursor: grabbing;
+}
+
+.ce-real-food.is-selected {
+  border-color: #0f766e;
+  background: #f0fdfa;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.25);
+}
+
+.ce-real-food.is-correct {
+  border-color: #10b981;
+  background: #ecfdf5;
+}
+
+.ce-real-food.is-wrong {
+  border-color: #e4573b;
+  background: #fef2f2;
+}
+
+.ce-real-food-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.ce-real-food-name {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ce-real-food-tag {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.tag-rte {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tag-cook {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.ce-food-empty-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border: 1.5px dashed #94a3b8;
+  border-radius: 12px;
+  background: rgba(241, 245, 249, 0.7);
+  cursor: pointer;
+  min-height: 54px;
+  transition: all 0.15s ease;
+}
+
+.ce-food-empty-slot:hover {
+  background: rgba(240, 253, 250, 0.95);
+  border-color: #0d9488;
+}
+
+.ce-slot-icon {
+  font-size: 18px;
+  filter: grayscale(1) opacity(0.5);
+}
+
+.ce-slot-status {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.ce-fridge-cleared-banner {
+  position: relative;
+  z-index: 2;
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: #ecfdf5;
+  border: 1.5px solid #6ee7b7;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #065f46;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+.ce-move-hint-bar {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+  padding: 2px 0;
+}
+
+.ce-hint-active {
+  color: #0f766e;
+  font-weight: 800;
+}
+
+.ce-move-destinations {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.ce-dest-card {
+  flex: 1;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 2px solid;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ce-dest-backup {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+}
+
+.ce-dest-backup.is-droppable {
+  border-color: #0284c7;
+  background: #e0f2fe;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+}
+
+.ce-dest-coldbox {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.ce-dest-coldbox.is-droppable {
+  border-color: #d97706;
+  background: #fef3c7;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
+}
+
+.ce-dest-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ce-dest-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.ce-dest-icon {
+  font-size: 20px;
+}
+
+.ce-dest-sub {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.ce-dest-badge {
+  font-size: 11px;
+  font-weight: 900;
+  background: #ffffff;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.ce-dest-badge.is-full-badge {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+  color: #065f46;
+}
+
+.ce-dest-slots {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-height: 58px;
+  align-items: center;
+}
+
+.ce-dest-empty-slot {
+  flex: 1;
+  min-width: 60px;
+  min-height: 52px;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+/* Digital badge for fridge in step 1 */
+.ce-step1-live-badge {
+  position: absolute;
+  top: 26px;
+  right: calc(50% - 195px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  transition: all 0.3s ease;
+}
+
+.ce-step1-live-badge.is-green {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.ce-step1-live-badge.is-yellow {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+.ce-step1-live-badge.is-red {
+  background: #ef4444;
+  color: #ffffff;
+  animation: pulse-alert 1.2s infinite;
+}
+
+.ce-step1-badge-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* Check / Move stage: shared big illustrated fridge with soft glow, like
+   the Figma "What should you do first?" reference screen. */
+.ce-hero { position: relative; display: flex; align-items: center; justify-content: center; height: 120px; margin-bottom: -6px; }
+.ce-hero-glow {
+  display: none !important;
+}
+.ce-hero-fridge { position: relative; height: 120px; width: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12)); }
+.ce-mainzone-fridge { height: 46px; width: auto; opacity: 0.9; margin-bottom: -2px; }
+
+/* Protect stage: sealed / open fridge box, built on the same fridge photo */
 .ce-panel-protect { align-items: center; }
 .ce-fridgebox {
   position: relative;
-  width: 110px;
-  height: 90px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+  width: 92px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e2e8f0;
   border: 1px solid #cbd5e1;
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.ce-fridgebox.is-small { width: 46px; height: 50px; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08); }
+.ce-fridgebox-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
 .ce-fridgebox-door {
   position: absolute;
-  inset: 8px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #fff 0%, #f1f5f9 100%);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
-  transition: transform 0.4s ease;
+  inset: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.5s ease;
   transform-origin: left center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.ce-fridgebox.is-open .ce-fridgebox-door { transform: rotateY(-60deg); }
-.ce-tag {
-  position: absolute;
-  bottom: -10px;
+.ce-fridgebox.is-open .ce-fridgebox-door { transform: rotateY(-100deg); }
+.ce-sticker {
   font-size: 9px;
+  line-height: 1.2;
   font-weight: 900;
-  letter-spacing: .04em;
-  border-radius: 999px;
-  padding: 3px 8px;
-  white-space: nowrap;
+  letter-spacing: .03em;
+  text-align: center;
+  color: #fff;
+  background: #e4573b;
+  border-radius: 8px;
+  padding: 4px 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
-.ce-tag-out { background: #e4573b; color: #fff; }
-.ce-tag-warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.ce-sticker-warn { background: #fbbf24; color: #78350f; font-size: 14px; padding: 3px 6px; }
 .ce-escape-note { position: absolute; bottom: -10px; font-size: 10px; font-weight: 900; color: #dc2626; white-space: nowrap; }
 
 /* Report stage: phone + notified targets */
@@ -6479,6 +7404,51 @@ button { font-family: inherit; cursor: pointer; border: none; }
 }
 .ce-hint { font-size: 13px; font-weight: 800; color: #64748b; }
 
+/* Report stage: person picker rendered as avatar cards instead of a list */
+.ce-options-avatar { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ce-opt-avatar {
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 76px;
+  text-align: center;
+  padding: 10px 6px;
+}
+.ce-opt-avatar .ce-opt-icon {
+  font-size: 26px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f1f5f9;
+}
+.ce-opt-avatar.is-selected .ce-opt-icon { background: #ccfbf1; }
+.ce-opt-avatar .ce-opt-label { font-size: 10px; font-weight: 800; }
+
+/* Record stage: real fill-in-the-log form */
+.ce-recordform { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.ce-recordform-head { display: flex; flex-direction: column; gap: 2px; text-align: center; }
+.ce-recordform-title { font-size: 15px; font-weight: 900; color: var(--ink); }
+.ce-recordform-sub { font-size: 11px; font-weight: 700; color: #64748b; }
+.ce-recordform-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 800; color: #334155; }
+.ce-recordform-row input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: var(--ink);
+}
+.ce-recordform-row input:focus { outline: none; border-color: var(--teal); }
+.ce-recordform-pair { flex: 1; display: flex; gap: 6px; }
+.ce-recordform-save { width: 100%; }
+.ce-recordform-skip { background: none; border: none; font-size: 11px; font-weight: 700; color: #94a3b8; text-decoration: underline; cursor: pointer; align-self: center; }
+
 .ce-next-btn {
   border: none;
   background: var(--teal);
@@ -6505,3 +7475,491 @@ button { font-family: inherit; cursor: pointer; border: none; }
   .ce-movezones { flex-direction: column; }
 }
 
+/* =======================================================================
+   Level 34 boss-mechanics additions: persistent status header, boss
+   banner, temperature log modal, tap-to-order sequence gate, and the
+   capacity-limited food sort (replaces the old static Move panel above).
+   ======================================================================= */
+
+/* ----- Persistent status header ----- */
+.ce-status {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: nowrap;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 8px 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 14px rgba(44, 55, 66, 0.06);
+  z-index: 10;
+}
+.ce-status-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.ce-status-title { font-size: 10.5px; letter-spacing: .04em; color: #64748b; }
+.ce-status-temp { font-size: 18px; font-variant-numeric: tabular-nums; font-weight: 900; }
+.ce-status-label { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: #f1f5f9; }
+.ce-status-main.is-green .ce-status-temp { color: #059669; }
+.ce-status-main.is-yellow .ce-status-temp { color: #d97706; }
+.ce-status-main.is-red .ce-status-temp { color: #e4573b; }
+.ce-status-main.is-red .ce-status-label { background: #fee2e2; color: #991b1b; animation: ce-pulse 1s ease-in-out infinite; }
+.ce-status-main.is-sealed .ce-status-temp,
+.ce-status-main.is-sealed .ce-status-label { color: #475569; }
+.ce-status-main.is-sealed .ce-status-label { background: #e2e8f0; }
+.ce-status-donotuse {
+  font-size: 9px; font-weight: 900; letter-spacing: .04em;
+  background: #e4573b; color: #fff; border-radius: 999px; padding: 2px 8px;
+}
+@keyframes ce-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+.ce-status-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.ce-status-side {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ce-status-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.ce-status-chip b { font-size: 12px; color: var(--ink); }
+.ce-log-btn {
+  border: none;
+  background: #1e293b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .03em;
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.ce-log-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* ----- Boss banner ----- */
+.ce-boss-banner {
+  position: fixed; top: 18%; left: 50%; transform: translateX(-50%);
+  z-index: 50; background: #e4573b; color: #fff; font-size: 20px; font-weight: 900;
+  letter-spacing: .05em; padding: 14px 26px; border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(228, 87, 34, 0.4);
+  animation: ce-banner-in .25s ease;
+}
+@keyframes ce-banner-in { from { opacity: 0; transform: translateX(-50%) scale(.8); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+
+/* ----- Check stage: big live readout ----- */
+.ce-bigtemp { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px; }
+.ce-bigtemp-val { font-size: 40px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.ce-bigtemp-status { font-size: 12px; font-weight: 900; letter-spacing: .06em; padding: 3px 10px; border-radius: 999px; }
+.ce-bigtemp.is-green .ce-bigtemp-val { color: #059669; }
+.ce-bigtemp.is-green .ce-bigtemp-status { background: #ecfdf5; color: #059669; }
+.ce-bigtemp.is-yellow .ce-bigtemp-val { color: #d97706; }
+.ce-bigtemp.is-yellow .ce-bigtemp-status { background: #fffbeb; color: #d97706; }
+.ce-bigtemp.is-red .ce-bigtemp-val { color: #e4573b; }
+.ce-bigtemp.is-red .ce-bigtemp-status { background: #fee2e2; color: #991b1b; }
+
+/* ----- Temperature Log modal ----- */
+.ce-logmodal { background: #fff; border-radius: 20px; padding: 20px; width: min(360px, 86vw); display: flex; flex-direction: column; gap: 10px; }
+.ce-logmodal h3 { margin: 0; font-size: 16px; font-weight: 900; color: var(--ink); }
+.ce-logmodal-warn { margin: 0; font-size: 12px; font-weight: 700; color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; }
+.ce-logmodal-graph { width: 100%; height: 60px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
+.ce-logmodal-rows { display: flex; flex-direction: column; gap: 4px; }
+.ce-logmodal-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: #334155; background: #f8fafc; border-radius: 8px; padding: 5px 10px; }
+.ce-logmodal-ok { margin: 0; font-size: 12px; font-weight: 800; color: #059669; }
+
+/* ----- Sequence puzzle gate ----- */
+.ce-seq { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 6px 0; width: 100%; }
+.ce-seq-title { margin: 0; font-size: 13px; font-weight: 900; color: var(--ink); text-align: center; }
+.ce-seq-slots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.ce-seq-slot {
+  min-width: 64px; height: 40px; border-radius: 10px; border: 2px dashed #cbd5e1; background: #f8fafc;
+  font-size: 11px; font-weight: 800; color: #94a3b8; cursor: default;
+}
+.ce-seq-slot.is-filled { border-style: solid; border-color: var(--teal); background: #f0fdfa; color: #0f766e; cursor: pointer; }
+.ce-seq-pool { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.ce-seq-card {
+  border: 2px solid #e2e8f0; background: #fff; border-radius: 12px; padding: 8px 14px;
+  font-size: 12px; font-weight: 900; color: var(--ink); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.ce-seq-card:hover { transform: translateY(-1px); }
+.ce-seq-msg { margin: 0; font-size: 12px; font-weight: 900; padding: 6px 12px; border-radius: 999px; }
+.ce-seq-msg.is-ok { background: #ecfdf5; color: #059669; }
+.ce-seq-msg.is-warn { background: #fef2f2; color: #991b1b; }
+
+/* ----- Move stage: real capacity-limited sort ----- */
+.ce-mainzone {
+  width: 100%; border-radius: 12px; padding: 8px; background: #fef2f2; border: 1.5px dashed #f87171;
+  display: flex; flex-direction: column; gap: 6px; cursor: default;
+}
+.ce-movezone.is-droppable, .ce-mainzone { cursor: pointer; }
+.ce-movezone-empty { font-size: 11px; font-weight: 700; color: #94a3b8; }
+.ce-food { position: relative; display: flex; align-items: center; gap: 2px; }
+.ce-food-btn {
+  display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: var(--ink);
+  background: #ffffff; border: 2px solid #e2e8f0; border-radius: 999px; padding: 5px 9px; cursor: pointer;
+}
+.ce-food.is-selected .ce-food-btn { border-color: var(--teal); background: #f0fdfa; }
+.ce-food.is-correct .ce-food-btn { border-color: #10b981; background: #ecfdf5; }
+.ce-food.is-wrong .ce-food-btn { border-color: #e4573b; background: #fef2f2; }
+.ce-food-icon { font-size: 14px; }
+.ce-food-info {
+  border: none; background: #f1f5f9; color: #64748b; font-size: 10px; font-weight: 900;
+  width: 18px; height: 18px; border-radius: 50%; cursor: pointer; line-height: 1;
+}
+.ce-food-tooltip {
+  position: absolute; bottom: calc(100% + 6px); left: 0; z-index: 5; white-space: nowrap;
+  background: #1e293b; color: #fff; font-size: 10px; font-weight: 700; border-radius: 8px; padding: 5px 9px;
+}
+
+/* ----- Warning banner (shared across stages) ----- */
+.ce-warning {
+  margin: 2px 0 0; font-size: 12px; font-weight: 800; color: #991b1b; background: #fef2f2;
+  border: 1px solid #fecaca; border-radius: 10px; padding: 7px 10px; text-align: center;
+}
+
+/* ----- Report stage alert line ----- */
+.ce-report-alert { margin: 0; font-size: 11px; font-weight: 800; color: #991b1b; text-align: center; line-height: 1.4; }
+
+/* ----- Record stage field labels ----- */
+.ce-logline-label { color: #334155; }
+
+/* ----- Boss Cleared recap ----- */
+.ce-boss-cleared {
+  width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  margin-top: 6px; padding: 14px; border-radius: 16px; background: linear-gradient(180deg, #fff7ed 0%, #fffbeb 100%);
+  border: 2px solid #fcd34d;
+}
+.ce-boss-title { margin: 0; font-size: 18px; font-weight: 900; color: #92400e; }
+.ce-coldchain-status { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.ce-coldchain-badge {
+  font-size: 11px; font-weight: 800; color: #065f46; background: #ecfdf5; border: 1px solid #a7f3d0;
+  border-radius: 999px; padding: 5px 10px;
+}
+.ce-boss-learn-en { margin: 4px 0 0; font-size: 12px; font-weight: 900; letter-spacing: .02em; color: var(--ink); text-align: center; }
+.ce-boss-learn-th { margin: 0; font-size: 12px; font-weight: 700; color: #64748b; text-align: center; }
+
+@media (max-width: 480px) {
+  .ce-status { padding: 8px 10px; }
+  .ce-status-side { margin-left: 0; }
+  .ce-log-btn { width: 100%; }
+}
+
+
+/* Level 35 Stages & Banner */
+.audit-stage-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  padding: 8px 24px;
+  margin: 0 auto;
+  box-shadow: 0 4px 16px rgba(40, 60, 50, 0.1);
+  width: fit-content;
+  max-width: 90%;
+  animation: bannerFadeIn 0.3s ease-out;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.audit-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.audit-stage-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #334155;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.audit-stage-title {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.audit-stage-sub {
+  color: #475569;
+  font-weight: 500;
+}
+
+.audit-round-prompt { margin: 0 auto; font-size: 14.5px; color: var(--ink); text-align: center; max-width: 920px; }
+.audit-round-msg { margin: 0 auto; padding: 8px 16px; border-radius: 12px; background: #fef2f2; color: #991b1b; font-size: 13px; font-weight: 800; text-align: center; max-width: 920px; }
+.audit-tile--flag { box-shadow: 0 0 0 3px #e4573b, 0 2px 6px rgba(40,60,50,.18); }
+.audit-round-list { display: flex; flex-direction: column; gap: 12px; max-width: 920px; width: 100%; margin: 0 auto; }
+.audit-round-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px 18px;
+  box-shadow: var(--shadow);
+  border: 2px solid #e2e8f0;
+  gap: 10px;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+.audit-round-card.is-locked { border-color: #10b981; background: #f0fdf4; }
+.audit-round-card.is-wrong { border-color: #ef4444; background: #fef2f2; }
+
+.audit-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.audit-card-idx {
+  font-size: 13px;
+  font-weight: 900;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+.audit-card-head > img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 4px;
+}
+.audit-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.audit-card-title {
+  font-size: 14.5px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.audit-card-cat-tag {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 1px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+.audit-card-problem {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+}
+.audit-card-problem strong {
+  color: #dc2626;
+}
+.audit-card-status {
+  flex-shrink: 0;
+}
+.audit-status-tag {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.audit-status-tag.is-locked {
+  color: #065f46;
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
+}
+.audit-status-tag.is-wrong {
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+}
+.audit-status-tag.is-selected {
+  color: #1e40af;
+  background: #dbeafe;
+  border: 1px solid #bfdbfe;
+}
+
+/* Options box down below (กล่องให้ลงมา - ขนาดกะทัดรัดและจัดกึ่งกลาง) */
+.audit-card-box {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+.audit-card-locked-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 6px 16px;
+  border-radius: 9px;
+  width: fit-content;
+}
+.audit-locked-icon {
+  font-size: 17px;
+}
+.audit-round-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: center;
+  width: 100%;
+}
+.audit-round-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 9px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.audit-round-opt:hover {
+  border-color: #94a3b8;
+  background: #fff;
+  transform: translateY(-1px);
+}
+.audit-round-opt.is-on {
+  border-color: #0d9488;
+  background: #f0fdfa;
+  color: #0f766e;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.2);
+}
+.audit-opt-check {
+  font-size: 11px;
+  font-weight: 900;
+  color: #0d9488;
+}
+.audit-round-check {
+  align-self: center;
+  font-size: 15px;
+  font-weight: 900;
+  padding: 10px 28px;
+  margin: 16px 0;
+}
+
+/* =======================================================================
+   Milestone Level 15 / 25 / 35 Celebration Banner in LevelCompleteCard
+   ======================================================================= */
+.win-promo-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin: 14px 0 16px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.22);
+  text-align: left;
+  animation: bannerPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bannerPop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.win-promo-badge-emoji {
+  font-size: 38px;
+  line-height: 1;
+  background: #fff;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.win-promo-badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.win-promo-badge-tag {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #b45309;
+  text-transform: uppercase;
+}
+
+.win-promo-badge-title {
+  font-size: 15.5px;
+  font-weight: 900;
+  color: #78350f;
+}
+
+.win-promo-badge-sub {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+}

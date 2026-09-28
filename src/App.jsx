@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import supermarketImg from './assets/supermarket.png'
+import { FOODS as COLD_EMERGENCY_FOODS } from './data/levels/level34.js'
 import {
   TIPS, LEVEL_SETS, DEFAULT_LEVEL_SET, DIFFICULTY_POOLS, pickRandomItems,
   LEVEL_TIME, levelTimeFor, CORRECT_POINTS, WRONG_POINTS,
@@ -15,6 +16,7 @@ import AssemblyScene from './components/AssemblyScene.jsx'
 import CuttingBoardScene from './components/CuttingBoardScene.jsx'
 import MealPrepScene from './components/MealPrepScene.jsx'
 import AuditScene from './components/AuditScene.jsx'
+import AuditWizardScene from './components/AuditWizardScene.jsx'
 import LeakScene from './components/LeakScene.jsx'
 import CoolStoreScene from './components/CoolStoreScene.jsx'
 import ViolationScene from './components/ViolationScene.jsx'
@@ -35,6 +37,7 @@ import * as audio from './lib/audio.js'
 import {
   getLastPlayedLevel, saveSnapshot, loadSnapshot, clearSnapshot,
   pushSnapshotRemote, pullSnapshotRemote, clearSnapshotRemote, pickFreshestSnapshot,
+  unlockAchievement, getMyAchievements,
 } from './lib/progress.js'
 import { getCoins, addCoins, spendCoins } from './lib/wallet.js'
 import { getInventory, buyItem, useItem, grantItem } from './lib/inventory.js'
@@ -192,7 +195,9 @@ export default function App() {
   const [running, setRunning] = useState(false)
   const [paused, setPaused] = useState(false)
   const [result, setResult] = useState(null) // { correct,total,score,levelScore,maxScore,passed,stars,netAdjust,reason }
-  const [winStreak, setWinStreak] = useState(0) // consecutive levels passed → coin multiplier
+  const [promotedBadge, setPromotedBadge] = useState(null) // badge just unlocked by passing level 15 / 25 / 35
+  const [showPromotionModal, setShowPromotionModal] = useState(false)
+  const [winStreak, setWinStreak] = useState(0)
   const [boardPlacements, setBoardPlacements] = useState({}) // cutting-board level: shelfId → boardId
   const [shelfZoomed, setShelfZoomed] = useState(false) // 'fridge-zoom' level (6): on the close-up shelf?
   // True once a scene level (6 / 7) has been submitted. Those levels keep
@@ -546,9 +551,21 @@ export default function App() {
     setTotal(newTotal)
     setRunning(false)
 
+    const userId = session?.user?.id ?? null
+
     if (coinsEarned > 0) {
-      const userId = session?.user?.id ?? null
       addCoins(userId, coinsEarned).then(setCoins)
+    }
+
+    // ----- Badge unlock (Fridge Freshies / Kitchen Keeper / Fridge Safety
+    // Masters) — awarded once, the moment the last level of that stage
+    // (15 / 25 / 35) is actually PASSED with at least 1 star.
+    const earnedBadge = (passed && stars > 0) ? PROFILE.badges.find((b) => b.earnAtLevel === level) : null
+    if (earnedBadge) {
+      unlockAchievement(userId, earnedBadge.id)
+      setPromotedBadge(earnedBadge)
+    } else {
+      setPromotedBadge(null)
     }
 
     // Build the "what went wrong" list — every item not in its correct place.
@@ -694,6 +711,67 @@ export default function App() {
     clearSnapshotRemote(session?.user?.id ?? null)
   }, [level, total, winStreak, scoreX2, session])
 
+  // Completed Level 35 HACCP Audit after all 4 rounds
+  const finishAuditLevel = useCallback(() => {
+    const userId = session?.user?.id ?? null
+    const correct = currentItems.length
+    const totalCount = currentItems.length
+    const maxScore = totalCount * CORRECT_POINTS
+    const levelScore = maxScore + TIME_FINISH_BONUS
+    const passed = true
+    const perfect = true
+    const stars = 3
+    const newStreak = winStreak + 1
+    setWinStreak(newStreak)
+    const streakMult = Math.min(3, 1 + 0.5 * newStreak)
+    const powerupMult = scoreX2 ? 2 : 1
+    const finalScore = Math.max(0, Math.round(levelScore * streakMult * powerupMult))
+    const coinsEarned = Math.floor(finalScore / 10)
+    const newTotal = Math.max(0, total + finalScore)
+    setTotal(newTotal)
+    setRunning(false)
+
+    if (coinsEarned > 0) {
+      addCoins(userId, coinsEarned).then(setCoins)
+    }
+
+    const earnedBadge = PROFILE.badges.find((b) => b.earnAtLevel === 35)
+    if (earnedBadge) {
+      unlockAchievement(userId, earnedBadge.id)
+      setPromotedBadge(earnedBadge)
+    } else {
+      setPromotedBadge(null)
+    }
+
+    setResult({
+      correct, total: totalCount, score: newTotal,
+      levelScore, maxScore, passed: true, perfect: true, reason: 'checked', stars: 3,
+      hintsUsed: 0, finishBonus: TIME_FINISH_BONUS, netAdjust: TIME_FINISH_BONUS,
+      streakMult, scoreX2Used: scoreX2, finalScore, coinsEarned,
+      wrongItems: [],
+      theme: { title: 'Food Safety Audit', sub: 'HACCP Inspection Complete!' },
+    })
+    setScreen('result')
+    audio.sfxWin()
+
+    supabase.rpc('submit_level_result', {
+      p_level: 35,
+      p_score: newTotal,
+      p_stars: 3,
+      p_correct_count: totalCount,
+      p_total_items: totalCount,
+    }).then(({ error }) => {
+      if (error) console.error('Could not save score:', error.message)
+    })
+
+    if (snapshotIntervalIdRef.current) {
+      clearInterval(snapshotIntervalIdRef.current)
+      snapshotIntervalIdRef.current = null
+    }
+    clearSnapshot()
+    clearSnapshotRemote(userId)
+  }, [currentItems, session, winStreak, scoreX2, total])
+
   const checkAnswers = useCallback(() => finish('checked'), [finish])
 
   // Auto-finish (Time Up) when the clock hits zero
@@ -706,6 +784,8 @@ export default function App() {
 
   const startLevel = (lvl = level, diff = difficulty, { paused = false } = {}) => {
     const items = itemsForLevel(lvl, diff)
+    setPromotedBadge(null)
+    setShowPromotionModal(false)
     setLevel(lvl)
     setDifficulty(diff)
     setCurrentItems(items)
@@ -907,6 +987,8 @@ export default function App() {
   const goMenu = () => {
     setRunning(false)
     setPaused(false)
+    setPromotedBadge(null)
+    setShowPromotionModal(false)
     setScreen('menu')
     // หมายเหตุ: ไม่ล้าง snapshot ตรงนี้โดยตั้งใจ — กด Home ออกมากลางเลเวล
     // ยังต้องกลับมาเล่นต่อจากจุดเดิมได้ตอนกด Play ใหม่ (ดู onPlayButtonClick)
@@ -957,7 +1039,7 @@ export default function App() {
         coins={!inGame ? coins : undefined}
       />
 
-      <div className={`page${(inGame && (currentLayout === 'audit' || currentLayout === 'violations')) ? ' page--audit' : ''}`}>
+      <div className={`page${(inGame && (currentLayout === 'audit' || currentLayout === 'auditwizard' || currentLayout === 'violations')) ? ' page--audit' : ''}`}>
         {screen === 'menu' && (
           <Menu
             onPlay={onPlayButtonClick}
@@ -1161,6 +1243,20 @@ export default function App() {
                 placements={placements}
                 reveal={revealBoard}
                 onResolveHazard={placeItem}
+                onFinishAudit={finishAuditLevel}
+              />
+            </div>
+            ) : currentLayout === 'auditwizard' ? (
+            <div className="board board--audit">
+              <AuditWizardScene
+                hazards={currentItems}
+                decor={currentDecor}
+                categories={currentShelves}
+                actions={currentCorrectionActions}
+                locations={currentLocations}
+                placements={placements}
+                reveal={revealBoard}
+                onResolveHazard={placeItem}
               />
             </div>
             ) : currentLayout === 'violations' ? (
@@ -1316,7 +1412,7 @@ export default function App() {
             </div>
             )}
 
-            {screen === 'game' && (
+            {screen === 'game' && currentLayout !== 'audit' && currentLayout !== 'auditwizard' && (
               <div className="actions">
                 <InventoryBar inventory={inventory} scoreX2Active={scoreX2} onUse={requestUseItem} />
                 <button
@@ -1388,14 +1484,37 @@ export default function App() {
       {/* ----- Result: Level Completed / Time Up ----- */}
       {screen === 'result' && result && (
         <Modal>
-          {result.reason === 'timeup'
-            ? <TimeUpCard result={result} onRetry={() => startLevel(level)} onMenu={goMenu} />
-            : <LevelCompleteCard
-                result={result}
-                onNext={() => startLevel(level + 1)}
-                onReplay={() => startLevel(level)}
-                onMenu={goMenu}
-              />}
+          {showPromotionModal && promotedBadge ? (
+            <PromotionCard
+              badge={promotedBadge}
+              onContinue={() => {
+                setShowPromotionModal(false)
+                setPromotedBadge(null)
+                startLevel(level + 1)
+              }}
+            />
+          ) : result.reason === 'timeup' ? (
+            <TimeUpCard result={result} onRetry={() => startLevel(level)} onMenu={goMenu} />
+          ) : (
+            <LevelCompleteCard
+              result={result}
+              promotedBadge={promotedBadge}
+              level={level}
+              onNext={() => {
+                if (promotedBadge) {
+                  setShowPromotionModal(true)
+                } else {
+                  startLevel(level + 1)
+                }
+              }}
+              onReplay={() => {
+                setPromotedBadge(null)
+                setShowPromotionModal(false)
+                startLevel(level)
+              }}
+              onMenu={goMenu}
+            />
+          )}
         </Modal>
       )}
 
@@ -1791,17 +1910,17 @@ function Menu({ onPlay, onLevels, onShop, onRewards }) {
 /* ---------- Difficulty / skill-tier select (shown right after Play) ---------- */
 const DIFFICULTY_TIERS = [
   {
-    tier: 1, emoji: '🐣', name: 'Fridge Freshies',
+    tier: 1, emoji: '🥉', name: 'Fridge Freshies',
     desc: 'New to cooking — ready to learn safe fridge habits.',
     detail: 'Guidance shown at all times, free. Simple item picks.',
   },
   {
-    tier: 2, emoji: '👩‍🍳', name: 'Kitchen Keeper',
+    tier: 2, emoji: '🥈', name: 'Kitchen Keeper',
     desc: 'Cooks at home — sharpening your storage skills.',
     detail: 'Hint button available (costs points). More varied picks.',
   },
   {
-    tier: 3, emoji: '🏆', name: 'Fridge Safety Masters',
+    tier: 3, emoji: '🥇', name: 'Fridge Safety Masters',
     desc: 'Nutrition & food service pros — bring on the toughest challenges.',
     detail: 'No guidance at all. Complex, mixed-category picks.',
   },
@@ -1855,6 +1974,9 @@ function ProfilePage({ coins, onBack, onSettings }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  // Which of PROFILE.badges (gameData.js) this player has actually unlocked —
+  // a Set of achievement_id strings, empty until getMyAchievements() resolves.
+  const [unlockedBadgeIds, setUnlockedBadgeIds] = useState(new Set())
 
   useEffect(() => {
     let cancelled = false
@@ -1869,6 +1991,7 @@ function ProfilePage({ coins, onBack, onSettings }) {
         .select('display_name, total_stars, created_at')
         .eq('id', user.id)
         .maybeSingle()
+      const unlocked = await getMyAchievements(user.id)
       if (!cancelled) {
         const stars = row?.total_stars ?? 0
         setProfile({
@@ -1878,6 +2001,7 @@ function ProfilePage({ coins, onBack, onSettings }) {
           trophies: stars,
           joined: row?.created_at ? new Date(row.created_at).toLocaleDateString() : '—',
         })
+        setUnlockedBadgeIds(new Set(unlocked.map((a) => a.achievement_id)))
         setLoading(false)
       }
     }
@@ -1924,12 +2048,18 @@ function ProfilePage({ coins, onBack, onSettings }) {
 
             <h2 className="profile-section-head">Badges</h2>
             <div className="profile-badges">
-              {PROFILE.badges.map((b) => (
-                <div className="profile-badge" key={b.name}>
-                  <div className="profile-badge-medal">{b.emoji}</div>
-                  <div className="profile-badge-name">{b.name}</div>
-                </div>
-              ))}
+              {(() => {
+                const earnedBadges = PROFILE.badges.filter((b) => unlockedBadgeIds.has(b.id))
+                if (earnedBadges.length === 0) {
+                  return <p className="profile-no-badges">No badges earned yet.</p>
+                }
+                return earnedBadges.map((b) => (
+                  <div className="profile-badge" key={b.id}>
+                    <div className="profile-badge-medal">{b.emoji}</div>
+                    <div className="profile-badge-name">{b.name}</div>
+                  </div>
+                ))
+              })()}
             </div>
 
             <h2 className="profile-section-head">Achievements</h2>
@@ -2001,19 +2131,180 @@ function Tips({ tips, onStart }) {
  * asset is needed. */
 // A single centred card: supermarket art on top, then the story copy and the
 // Let's Play button. No timer — the player starts the level with the button.
+//
+// Level 34 ("Cold Storage Emergency") supplies a second `story.beat2` —
+// the setting ("Hospital Nutrition Unit, 10:30am, prepping lunch, one
+// fridge is drifting warm") on the first card, then a second card that
+// actually shows the fridge with today's stock inside (the same FOODS
+// list the Move stage sorts later), before handing off into gameplay.
+// Any level without `beat2` keeps the original single-card behaviour.
 function Story({ story, onContinue }) {
+  const [beat, setBeat] = useState(0)
+  const hasBeat2 = !!story.beat2
+
   return (
     <main className="story">
       <div className="story-card">
-        <img className="story-scene" src={supermarketImg} alt="" draggable="false" />
-        <h2 className="story-title">{story.title}</h2>
-        <p className="story-sub">{story.sub}</p>
-        <p className="story-caption">
-          {story.caption} <strong>{story.highlight}</strong>
-        </p>
-        <button className="btn btn-play story-start" onClick={onContinue}>{story.cta}</button>
+        {story.setting && <span className="story-setting">{story.setting}</span>}
+
+        {beat === 0 ? (
+          <>
+            {hasBeat2 ? <NutritionUnitScene /> : <img className="story-scene" src={supermarketImg} alt="" draggable="false" />}
+            <h2 className="story-title">{story.title}</h2>
+            <p className="story-sub">{story.sub}</p>
+            <p className="story-caption">
+              {story.caption} <strong>{story.highlight}</strong>
+            </p>
+            <button
+              className="btn btn-play story-start"
+              onClick={() => (hasBeat2 ? setBeat(1) : onContinue())}
+            >
+              {story.cta}
+            </button>
+          </>
+        ) : (
+          <>
+            <ColdEmergencyFridgeScene foods={COLD_EMERGENCY_FOODS} />
+            <h2 className="story-title">{story.beat2.title}</h2>
+            <p className="story-sub">{story.beat2.sub}</p>
+            <div className="story-stocklist">
+              {COLD_EMERGENCY_FOODS.map((f) => (
+                <span key={f.key} className="story-stockchip">{f.icon} {f.label}</span>
+              ))}
+            </div>
+            <button className="btn btn-play story-start" onClick={onContinue}>{story.beat2.cta}</button>
+          </>
+        )}
+
+        {hasBeat2 && (
+          <div className="story-dots">
+            <span className={'story-dot' + (beat === 0 ? ' is-active' : '')} />
+            <span className={'story-dot' + (beat === 1 ? ' is-active' : '')} />
+          </div>
+        )}
       </div>
     </main>
+  )
+}
+
+// ---------------------------------------------------------------------
+// Level 34 beat 1 — "prepping lunch when the fridge starts drifting warm":
+// a wall clock reading 10:30, a nutrition-unit staffer with a clipboard
+// standing by a stack of patient lunch trays, and a fridge in the
+// background already showing a rising, reddening temperature readout.
+// Flat vector, no external art asset, matches SupermarketScene's style.
+// ---------------------------------------------------------------------
+function NutritionUnitScene() {
+  return (
+    <svg className="story-scene" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      {/* floor */}
+      <rect x="0" y="150" width="320" height="30" fill="#f3efe0" />
+
+      {/* wall clock reading 10:30 */}
+      <g>
+        <circle cx="46" cy="42" r="24" fill="#fff" stroke="#57c4a6" strokeWidth="3.5" />
+        {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+          <line
+            key={deg}
+            x1={46 + Math.sin((deg * Math.PI) / 180) * 19}
+            y1={42 - Math.cos((deg * Math.PI) / 180) * 19}
+            x2={46 + Math.sin((deg * Math.PI) / 180) * 21.5}
+            y2={42 - Math.cos((deg * Math.PI) / 180) * 21.5}
+            stroke="#bcd9cf"
+            strokeWidth="1.6"
+          />
+        ))}
+        {/* hour hand → between 10 and 11 */}
+        <line x1="46" y1="42" x2="35" y2="30" stroke="#2c3742" strokeWidth="3" strokeLinecap="round" />
+        {/* minute hand → 30 min, straight down */}
+        <line x1="46" y1="42" x2="46" y2="60" stroke="#2c3742" strokeWidth="2.6" strokeLinecap="round" />
+        <circle cx="46" cy="42" r="2.6" fill="#e4573b" />
+      </g>
+      <text x="46" y="80" textAnchor="middle" fontSize="12" fontWeight="900" fill="#0d7355">10:30 AM</text>
+
+      {/* nutrition-unit staffer with clipboard */}
+      <g>
+        <circle cx="46" cy="112" r="12" fill="#f4c9a0" />
+        <path d="M46 100 a13 8 0 0 1 13 -3" fill="none" stroke="#5b4636" strokeWidth="4" strokeLinecap="round" />
+        <path d="M30 148 q0 -32 16 -36 q16 4 16 36 z" fill="#57c4a6" />
+        <rect x="24" y="118" width="9" height="22" rx="3.5" fill="#f4c9a0" transform="rotate(-14 24 118)" />
+        <rect x="14" y="122" width="20" height="26" rx="2.5" fill="#fff" stroke="#9aa3a8" strokeWidth="1.4" />
+        <line x1="18" y1="130" x2="30" y2="130" stroke="#c9d3d6" strokeWidth="1.6" />
+        <line x1="18" y1="136" x2="30" y2="136" stroke="#c9d3d6" strokeWidth="1.6" />
+        <line x1="18" y1="142" x2="26" y2="142" stroke="#c9d3d6" strokeWidth="1.6" />
+      </g>
+
+      {/* stack of patient lunch trays being prepped */}
+      <g>
+        {[0, 1, 2].map((i) => (
+          <rect key={i} x={78} y={140 - i * 9} width="52" height="9" rx="3" fill={i === 2 ? '#fff6e0' : '#eef2f3'} stroke="#d7d0bb" strokeWidth="1" />
+        ))}
+        <circle cx="92" cy="133" r="4" fill="#7fd3b4" />
+        <circle cx="104" cy="133" r="4" fill="#f4de3b" />
+        <circle cx="116" cy="133" r="4" fill="#f4a3a3" />
+      </g>
+
+      {/* fridge in the background, already drifting warm */}
+      <g>
+        <rect x="188" y="18" width="112" height="132" rx="12" fill="#eef2f3" stroke="#c9d3d6" strokeWidth="2" />
+        <line x1="244" y1="18" x2="244" y2="150" stroke="#c9d3d6" strokeWidth="1.6" />
+        {[54, 90, 122].map((y) => (
+          <rect key={y} x="194" y={y} width="44" height="3.5" rx="1.6" fill="#d7e6e0" />
+        ))}
+        {/* digital readout, climbing + reddening */}
+        <rect x="256" y="30" width="34" height="18" rx="4" fill="#1e293b" />
+        <text x="273" y="43" textAnchor="middle" fontSize="10" fontWeight="900" fill="#f87171" fontFamily="monospace">8°C</text>
+        {/* warning badge */}
+        <circle cx="292" cy="24" r="12" fill="#e4573b" />
+        <text x="292" y="29" textAnchor="middle" fontSize="14" fill="#fff">!</text>
+      </g>
+      <text x="244" y="168" textAnchor="middle" fontSize="10" fontWeight="800" fill="#c0392b">Fridge 2 — temperature rising</text>
+    </svg>
+  )
+}
+
+// ---------------------------------------------------------------------
+// Level 34 beat 2 — the fridge itself, doors open, with today's actual
+// stock sitting on the shelves (reuses level34.js's FOODS list — the same
+// five items the Move stage later sorts): patient salad, milk, pudding,
+// cooked meat still needing reheating, and raw ingredients.
+// ---------------------------------------------------------------------
+function ColdEmergencyFridgeScene({ foods }) {
+  const byKey = Object.fromEntries(foods.map((f) => [f.key, f]))
+  const rteRow = ['salad', 'milk', 'pudding'].map((k) => byKey[k]).filter(Boolean)
+  const cookRow = ['meat', 'raw'].map((k) => byKey[k]).filter(Boolean)
+  return (
+    <svg className="story-scene" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="0" y="170" width="320" height="30" fill="#f3efe0" />
+
+      {/* fridge casing */}
+      <rect x="80" y="12" width="180" height="168" rx="16" fill="#eef2f3" stroke="#c9d3d6" strokeWidth="2.5" />
+
+      {/* left door: 3 shelves carrying the real stock */}
+      <rect x="88" y="20" width="104" height="152" rx="10" fill="#ffffff" stroke="#c9d3d6" strokeWidth="1.6" />
+      {[78, 122].map((y) => (
+        <rect key={y} x="92" y={y} width="96" height="4" rx="2" fill="#d7e6e0" />
+      ))}
+      {/* shelf 1 — ready-to-eat, going straight to a patient */}
+      {rteRow.map((f, i) => (
+        <text key={f.key} x={108 + i * 32} y="62" textAnchor="middle" fontSize="22">{f.icon}</text>
+      ))}
+      {/* shelf 2 — still needs cooking/reheating */}
+      {cookRow.map((f, i) => (
+        <text key={f.key} x={120 + i * 44} y="106" textAnchor="middle" fontSize="22">{f.icon}</text>
+      ))}
+      <text x="140" y="160" textAnchor="middle" fontSize="9" fontWeight="800" fill="#6b7680">5 items currently stored</text>
+
+      {/* right door bins — decorative, matches the fridge's real layout */}
+      <rect x="200" y="20" width="52" height="152" rx="10" fill="#f7fbfa" stroke="#c9d3d6" strokeWidth="1.6" />
+      {[36, 78, 120].map((y) => (
+        <rect key={y} x="206" y={y} width="40" height="24" rx="6" fill="#eaf6f0" stroke="#bfe6d3" strokeWidth="1.2" />
+      ))}
+
+      {/* temperature badge on the casing */}
+      <rect x="200" y="0" width="60" height="24" rx="8" fill="#e4573b" />
+      <text x="230" y="16" textAnchor="middle" fontSize="11" fontWeight="900" fill="#fff">🌡️ 8°C</text>
+    </svg>
   )
 }
 
@@ -2334,7 +2625,26 @@ function FeedbackCard({ result, onNext }) {
 }
 
 /* ---------- Level Complete / Not Passed (4.6) ---------- */
-function LevelCompleteCard({ result, onNext, onReplay, onMenu }) {
+/* ---------- Badge promotion popup (level 15 / 25 / 35 passed) ---------- */
+function PromotionCard({ badge, onContinue }) {
+  return (
+    <div className="promo-card">
+      <div className="promo-ribbon">🎉 CONGRATULATIONS! 🎉</div>
+      <p className="promo-lead">You have been promoted to</p>
+      <h2 className="promo-title">{badge.name}!</h2>
+      <div className="promo-medal">
+        <span className="promo-medal-emoji">{badge.emoji}</span>
+        <span className="promo-sparkle promo-sparkle--1">✨</span>
+        <span className="promo-sparkle promo-sparkle--2">💎</span>
+        <span className="promo-sparkle promo-sparkle--3">⭐</span>
+      </div>
+      <p className="promo-sub">Your dedication and skills have earned you the title of {badge.name}!</p>
+      <button className="btn btn-play promo-continue" onClick={onContinue}>Continue</button>
+    </div>
+  )
+}
+
+function LevelCompleteCard({ result, promotedBadge, level, onNext, onReplay, onMenu }) {
   const { correct, total: tot, levelScore, maxScore, passed, perfect, stars, netAdjust, streakMult, scoreX2Used, finalScore, coinsEarned } = result
 
   // ----- Not passed yet -----
@@ -2396,7 +2706,20 @@ function LevelCompleteCard({ result, onNext, onReplay, onMenu }) {
         </div>
       </div>
 
-      <button className="btn btn-play end-primary" onClick={onNext}>Next Level →</button>
+      {promotedBadge && (
+        <div className="win-promo-banner">
+          <div className="win-promo-badge-emoji">{promotedBadge.emoji}</div>
+          <div className="win-promo-badge-info">
+            <div className="win-promo-badge-tag">MILESTONE UNLOCKED! 🎖️</div>
+            <div className="win-promo-badge-title">Promoted to {promotedBadge.name}!</div>
+            <div className="win-promo-badge-sub">Level {promotedBadge.earnAtLevel} Completed Successfully</div>
+          </div>
+        </div>
+      )}
+
+      <button className="btn btn-play end-primary" onClick={onNext}>
+        {promotedBadge ? 'Claim Title & Next Level →' : 'Next Level →'}
+      </button>
       <button className="btn btn-mint" onClick={onReplay}>↻ Replay</button>
       <button className="btn btn-mint" onClick={onMenu}>⌂ Main Menu</button>
     </div>

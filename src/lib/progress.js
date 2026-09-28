@@ -20,6 +20,33 @@ export async function getMyAchievements(userId) {
 }
 
 // ---------------------------------------------------------------------------
+// unlockAchievement — idempotent: called from App.jsx's finish() the moment
+// a badge-tier level (see PROFILE.badges' `earnAtLevel` in gameData.js) is
+// passed. user_achievements has a unique (user_id, achievement_id)
+// constraint, so upserting with ignoreDuplicates is safe to call again on
+// every replay of that level without erroring or double-inserting.
+// ---------------------------------------------------------------------------
+export async function unlockAchievement(userId, achievementId) {
+  if (!userId || !achievementId) return false
+  try {
+    const { error } = await supabase
+      .from('user_achievements')
+      .upsert(
+        { user_id: userId, achievement_id: achievementId },
+        { onConflict: 'user_id,achievement_id', ignoreDuplicates: true }
+      )
+    if (error) {
+      console.error('unlockAchievement failed:', error.message)
+      return false
+    }
+    return true
+  } catch (e) {
+    console.error('unlockAchievement failed:', e)
+    return false
+  }
+}
+
+// ---------------------------------------------------------------------------
 // getLastPlayedLevel — the level the player should resume at: the lowest
 // unlocked level they haven't earned a star on yet. Falls back to level 1
 // for brand-new players (or if anything goes wrong).

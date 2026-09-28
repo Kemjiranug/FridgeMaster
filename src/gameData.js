@@ -88,6 +88,7 @@ export const LEVELS = [
   { n: 36, name: 'Raw Meat Market (Bonus)', color: '#f7c6c6' },
   { n: 37, name: 'Fridge Thermometers (Bonus)', color: '#f2b53a' },
   { n: 38, name: 'Fridge Fix-Up (Bonus)',   color: '#f0956b' },
+  { n: 39, name: 'HACCP Audit Classic (Bonus)', color: '#0d7355' },
 ]
 
 export const LEVEL_TIME = 60 // seconds (1:00) — fallback / levels 1-15, see levelTimeFor()
@@ -95,6 +96,7 @@ export const LEVEL_TIME = 60 // seconds (1:00) — fallback / levels 1-15, see l
 // ----- Per-tier time limit -----
 // Level 1-15: 1:00 · Level 16-25: 1:30 · Level 26-35: 2:00.
 export const levelTimeFor = (lvl) => {
+  if (lvl === 35) return 240 // 4:00 for the full 4-round HACCP audit
   if (lvl >= 26) return 120
   if (lvl >= 16) return 90
   return LEVEL_TIME
@@ -128,12 +130,22 @@ export const REWARDS = {
 // Profile page — game-flavoured stats & badges.
 // NOTE: coins/trophies aren't persisted yet, so these act as display defaults;
 // stars and the display name come from the real Supabase account.
+//
+// Badges are earned by PASSING the last level of each difficulty stage —
+// Stage 1 (Fridge Freshies) is levels 1-15, Stage 2 (Kitchen Keeper) is
+// 16-25, Stage 3 (Fridge Safety Masters) is 26-35 (same boundaries as
+// levelTimeFor() above). `id` matches achievement_id in the `achievements` /
+// `user_achievements` tables (see backend/achievements.sql); App.jsx's
+// finish() calls unlockAchievement(userId, id) the moment `earnAtLevel` is
+// passed, and shows a "Congratulations, you've been promoted!" modal.
+// ProfilePage reads getMyAchievements() to know which of these are actually
+// unlocked vs. still locked for this player.
 export const PROFILE = {
   starGoal: 60,
   badges: [
-    { name: 'Fridge Freshies', emoji: '🥈' },
-    { name: 'Kitchen Keeper', emoji: '🥉' },
-    { name: 'Fridge Safety Masters', emoji: '🥇' },
+    { id: 'fridge_freshies', name: 'Fridge Freshies', emoji: '🥉', earnAtLevel: 15 },
+    { id: 'kitchen_keeper', name: 'Kitchen Keeper', emoji: '🥈', earnAtLevel: 25 },
+    { id: 'fridge_safety_masters', name: 'Fridge Safety Masters', emoji: '🥇', earnAtLevel: 35 },
   ],
 }
 

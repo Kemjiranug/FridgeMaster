@@ -41,8 +41,9 @@ import level35 from './level35.js'
 import level36 from './level36.js'
 import level37 from './level37.js'
 import level38 from './level38.js'
+import level39 from './level39.js'
 
-const LEVEL_FILES = [level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, level11, level12, level13, level15, level18, level19, level20, level22, level24, level27, level31, level33, level34, level35, level36, level37, level38]
+const LEVEL_FILES = [level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, level11, level12, level13, level15, level18, level19, level20, level22, level24, level27, level31, level33, level34, level35, level36, level37, level38, level39]
 
 const shuffle = (arr) => {
   const a = [...arr]

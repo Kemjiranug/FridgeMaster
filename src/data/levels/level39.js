@@ -1,6 +1,8 @@
 import { ITEMS_BY_ID } from '../items.js'
 
-// Level 35 — "HACCP Fridge Master Audit" (FINAL BOSS).
+// Level 39 — "HACCP Fridge Master Audit (Classic)": the original Level 35 (per-item
+// Inspect -> Identify -> Correct -> Record wizard), kept after Level 35 became 3 rounds.
+// Same items/scoring; only `n` and `layout` differ.
 //
 // The player plays a food-service worker doing a pre-service fridge audit.
 // A big walk-in fridge (~25 tiles: 12 real hazards + 13 "looks fine" decor
@@ -22,23 +24,23 @@ import { ITEMS_BY_ID } from '../items.js'
 
 // The 5 HACCP categories from STEP 2 (IDENTIFY).
 export const HAZARD_CATEGORIES = [
-  { id: 'cat-temp',    name: 'Temperature',         icon: '🌡️', hint: 'Fridge/freezer reading out of range' },
-  { id: 'cat-cross',   name: 'Cross-Contamination', icon: '🦠', hint: 'Raw touching or dripping onto ready-to-eat food' },
-  { id: 'cat-date',    name: 'Date / Label',        icon: '📅', hint: 'Expired food or a missing/unclear label' },
-  { id: 'cat-storage', name: 'Storage',             icon: '📦', hint: 'Uncovered, unsealed, overcrowded or in the wrong fridge' },
-  { id: 'cat-chain',   name: 'Cold Chain',          icon: '❄️', hint: 'Food left out of proper cold storage too long' },
+  { id: 'cat-temp',    name: 'Temperature',          icon: '🌡️', hint: 'Fridge/freezer reading out of range', color: '#f4a3a3' },
+  { id: 'cat-cross',   name: 'Cross-Contamination',  icon: '🦠', hint: 'Raw touching or dripping onto ready-to-eat food', color: '#f0956b' },
+  { id: 'cat-date',    name: 'Date / Label',         icon: '📅', hint: 'Expired food or a missing/unclear label', color: '#f4de3b' },
+  { id: 'cat-storage', name: 'Storage',              icon: '📦', hint: 'Uncovered, unsealed, overcrowded or in the wrong fridge', color: '#7fd3b4' },
+  { id: 'cat-chain',   name: 'Cold Chain',           icon: '❄️', hint: 'Food left out of proper cold storage too long', color: '#4ea8de' },
 ]
 
 // The 8 corrective actions from STEP 3 (CORRECT).
 export const CORRECTION_ACTIONS = [
-  { id: 'move',      name: 'Move',             icon: '➡️', hint: 'Move to the correct shelf, compartment or backup fridge' },
-  { id: 'cover',     name: 'Cover / Seal',     icon: '🥡', hint: 'Cover, wrap, or transfer to a sealed container' },
-  { id: 'repack',    name: 'Repack / Relabel', icon: '📦', hint: 'Transfer to clean container and label with name & date' },
-  { id: 'adjust',    name: 'Adjust Temp',      icon: '🌡️', hint: 'Adjust thermostat setting or check cooling system' },
-  { id: 'use-first', name: 'Use First (FEFO)', icon: '⏳', hint: 'Rotate forward to front of shelf to use before newer stock' },
-  { id: 'hold',      name: 'Hold / Inspect',   icon: '✋', hint: 'Quarantine and verify safety before service' },
-  { id: 'discard',   name: 'Discard / Toss',   icon: '🗑️', hint: 'Dispose of expired, spoiled or contaminated food immediately' },
-  { id: 'clean',     name: 'Clean & Sanitize', icon: '🧽', hint: 'Clean and sanitize spillages or affected surfaces' },
+  { id: 'move',      name: 'Move',      icon: '➡️' },
+  { id: 'cover',     name: 'Cover',     icon: '🥡' },
+  { id: 'repack',    name: 'Repack',    icon: '📦' },
+  { id: 'adjust',    name: 'Adjust',    icon: '🌡️' },
+  { id: 'use-first', name: 'Use First', icon: '⏳' },
+  { id: 'hold',      name: 'Hold',      icon: '✋' },
+  { id: 'discard',   name: 'Discard',   icon: '🗑️' },
+  { id: 'clean',     name: 'Clean',     icon: '🧽' },
 ]
 
 // The setting is randomized each playthrough (see AuditScene.jsx) so the
@@ -94,8 +96,8 @@ export const TIPS = [
 ]
 
 export default {
-  n: 35,
-  layout: 'audit',
+  n: 39,
+  layout: 'auditwizard',
   shelves: HAZARD_CATEGORIES,
   locations: LOCATIONS,
   correctionActions: CORRECTION_ACTIONS,

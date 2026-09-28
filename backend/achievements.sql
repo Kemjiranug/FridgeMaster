@@ -58,9 +58,9 @@ grant select on public.user_achievements to anon;
 
 insert into public.achievements (achievement_id, title, description, required_level, icon)
 values
-  ('fridge_freshies', 'Fridge Freshies', 'New to cooking — ready to learn safe fridge habits.', 20, '🐣'),
-  ('kitchen_keeper', 'Kitchen Keeper', 'Cooks at home — sharpening your storage skills.', 30, '👩‍🍳'),
-  ('fridge_safety_masters', 'Fridge Safety Masters', 'Nutrition & food service pros — bring on the toughest challenges.', 40, '🏆')
+  ('fridge_freshies', 'Fridge Freshies', 'New to cooking — ready to learn safe fridge habits.', 15, '🐣'),
+  ('kitchen_keeper', 'Kitchen Keeper', 'Cooks at home — sharpening your storage skills.', 25, '👩‍🍳'),
+  ('fridge_safety_masters', 'Fridge Safety Masters', 'Nutrition & food service pros — bring on the toughest challenges.', 35, '🏆')
 on conflict (achievement_id) do update
 set title = excluded.title,
     description = excluded.description,
