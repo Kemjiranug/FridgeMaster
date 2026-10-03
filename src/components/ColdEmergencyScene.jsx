@@ -741,13 +741,13 @@ export default function ColdEmergencyScene({ items, placements, reveal, onChoose
   const chooseCheck = (optionId) => {
     if (reveal) return
     if (optionId === 'l34-check-move') {
-      setWarning('Check the temperature first! Assess the situation before deciding to move food.')
+      setWarning(null)
       audio.sfxWrong?.()
       onChoose(checkItem.id, optionId)
       return
     }
     if (optionId === 'l34-check-report') {
-      setWarning('Check the temperature first! Protect the food and assess the situation before reporting.')
+      setWarning(null)
       audio.sfxWrong?.()
       onChoose(checkItem.id, optionId)
       return
