@@ -1,6 +1,6 @@
 import { ITEMS_BY_ID } from '../items.js'
 
-// Level 31 — "Patient Meal Safe Zone" ("อาหารผู้ป่วย...ห้ามปน").
+// Level 31 — "Patient Meal Safe Zone".
 // Hospital Nutrition Unit, ready-to-eat (RTE) fridge.
 //
 // A standard sort like every other non-special level (see level09.js):
@@ -47,17 +47,21 @@ export const TIPS = [
 
 export default {
   n: 31,
+  layout: 'patientmeal',
   tips: TIPS,
-  // Whole fridge open — no padlocked compartments.
   locks: [],
   shelves: [
     {
-      id: 'keep', name: 'Patient Meal Fridge (RTE)',
-      hint: 'Cooked & ready-to-eat only', color: '#7FD3B4',
+      id: 'keep',
+      name: 'Patient Meal Fridge (RTE)',
+      hint: 'Cooked & ready-to-eat only (<5°C)',
+      color: '#7FD3B4',
     },
     {
-      id: 'remove', name: 'Remove — Not RTE',
-      hint: 'Raw or not ready-to-eat', color: '#F0956B',
+      id: 'remove',
+      name: 'Move Out — Not RTE',
+      hint: 'Raw or not ready-to-eat',
+      color: '#F0956B',
     },
   ],
   items: [
@@ -66,7 +70,18 @@ export default {
     { id: 'l31-diabetic-meal',   shelf: 'keep' },
     { id: 'milk',                shelf: 'keep' },
     { id: 'salad',               shelf: 'keep' },
-    { id: 'l6-pudding',          shelf: 'keep' },
+    { id: 'l6-pudding',          shelf: 'keep', expiry: null },
     { id: 'raw-chicken',         shelf: 'remove' },
   ],
+  // All 7 items start inside the Patient Meal Fridge;
+  // Raw chicken was placed inside by mistake and must be moved out!
+  startPlacements: {
+    'l31-regular-meal':    'keep',
+    'l31-low-sodium-meal': 'keep',
+    'l31-diabetic-meal':   'keep',
+    'milk':                'keep',
+    'salad':               'keep',
+    'l6-pudding':          'keep',
+    'raw-chicken':         'keep',
+  },
 }

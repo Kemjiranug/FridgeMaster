@@ -79,7 +79,7 @@ export default function Shop({ coins = 0, onBuy, onBack, backLabel = '← Back T
               Confirm Purchase →
             </button>
             <button className="shop-modal-cancel" onClick={() => setPending(null)}>
-               Cancel
+              Cancel
             </button>
           </div>
         </div>

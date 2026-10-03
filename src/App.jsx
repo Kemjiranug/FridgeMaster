@@ -27,6 +27,7 @@ import WhichFridgeScene from './components/WhichFridgeScene.jsx'
 import TempDetectiveScene from './components/TempDetectiveScene.jsx'
 import BlackoutScene from './components/BlackoutScene.jsx'
 import ColdEmergencyScene from './components/ColdEmergencyScene.jsx'
+import PatientMealScene from './components/PatientMealScene.jsx'
 import Modal from './components/Modal.jsx'
 import Settings from './components/Settings.jsx'
 import Rewards from './components/Rewards.jsx'
@@ -387,7 +388,7 @@ export default function App() {
   const allBoardsInFridge = usedBoardIds.length === 0 || boardsInFridgeCount === usedBoardIds.length
   // 'dial'-layout levels (Level 2) and 'table'-layout (Level 10) can
   // be re-checked at any time, so Check Answers is never blocked on a count.
-  const allPlaced = currentLayout === 'dial' || currentLayout === 'table'
+  const allPlaced = currentLayout === 'dial' || currentLayout === 'table' || currentLayout === 'patientmeal'
     ? true
     : placedCount === currentItems.length && allBoardsInFridge
 
@@ -1321,6 +1322,7 @@ export default function App() {
             ) : currentLayout === 'blackout' ? (
             <div className="board board--blackout">
               <BlackoutScene
+                key={`blackout-${level}-${playSessionKey}`}
                 items={currentItems}
                 placements={placements}
                 reveal={revealBoard}
@@ -1358,6 +1360,25 @@ export default function App() {
             ) : currentLayout === 'whichfridge' ? (
             <div className="board board--whichfridge">
               <WhichFridgeScene
+                shelves={currentShelves}
+                items={currentItems}
+                placements={placements}
+                itemsById={itemsById}
+                selectedId={selectedId}
+                reveal={revealBoard}
+                hintShelfId={hintShelfId}
+                onSelect={(id) => setSelectedId((s) => (s === id ? null : id))}
+                onDropItem={placeItem}
+                onPickPlaced={returnItem}
+                onShelfClick={(shelfId) => {
+                  if (selectedId) placeItem(selectedId, shelfId)
+                }}
+              />
+            </div>
+            ) : currentLayout === 'patientmeal' ? (
+            <div className="board board--patientmeal">
+              <PatientMealScene
+                key={`patientmeal-${level}-${playSessionKey}`}
                 shelves={currentShelves}
                 items={currentItems}
                 placements={placements}
@@ -2149,7 +2170,13 @@ function Story({ story, onContinue }) {
 
         {beat === 0 ? (
           <>
-            {hasBeat2 ? <NutritionUnitScene /> : <img className="story-scene" src={supermarketImg} alt="" draggable="false" />}
+            {story.img ? (
+              <img className="story-scene story-scene--photo" src={story.img} alt={story.title} draggable="false" />
+            ) : hasBeat2 ? (
+              <NutritionUnitScene />
+            ) : (
+              <img className="story-scene" src={supermarketImg} alt="" draggable="false" />
+            )}
             <h2 className="story-title">{story.title}</h2>
             <p className="story-sub">{story.sub}</p>
             <p className="story-caption">
@@ -2164,7 +2191,11 @@ function Story({ story, onContinue }) {
           </>
         ) : (
           <>
-            <ColdEmergencyFridgeScene foods={COLD_EMERGENCY_FOODS} />
+            {story.beat2?.img ? (
+              <img className="story-scene story-scene--photo" src={story.beat2.img} alt={story.beat2.title} draggable="false" />
+            ) : (
+              <ColdEmergencyFridgeScene foods={COLD_EMERGENCY_FOODS} />
+            )}
             <h2 className="story-title">{story.beat2.title}</h2>
             <p className="story-sub">{story.beat2.sub}</p>
             <div className="story-stocklist">

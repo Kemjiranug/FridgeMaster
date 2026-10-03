@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import * as audio from '../lib/audio.js'
 
 // Level 24 — "Fridge Blackout!"
@@ -14,9 +14,9 @@ import * as audio from '../lib/audio.js'
 // a choice has been made).
 
 const BUTTONS = [
-  { id: 'open', label: 'Open Fridge', icon: '🚪' },
   { id: 'closed', label: 'Keep Closed', icon: '🔒' },
-  { id: 'cooler', label: 'Move to Ice Cooler', icon: '🧊' },
+  { id: 'open', label: 'Open Fridge', icon: '🚪' },
+  { id: 'cooler', label: 'Move to Ice Cooler', icon: '❄️' },
 ]
 
 export default function BlackoutScene({ items, placements, reveal, onChoose }) {
@@ -26,24 +26,38 @@ export default function BlackoutScene({ items, placements, reveal, onChoose }) {
   const decided = choice != null
   const mark = reveal ? (choice === item.shelf ? 'correct' : 'wrong') : null
   const doorOpen = choice === 'open'
-  const movedOut = choice === 'cooler'
+
+  // Reset back to stage 0 when level is reset or placements are cleared
+  useEffect(() => {
+    if (!placements || Object.keys(placements).length === 0) {
+      setIndex(0)
+    }
+  }, [placements])
 
   // The fridge visibly gets dimmer / more stale-looking as the outage drags
   // on — purely a mood cue tied to which stage we're on (0, 1, 2 …).
   const dimLevel = Math.min(index, 2)
 
-  // Cold Meter: drains a little for every stage reached (time passing), and
-  // takes a hard hit for every stage where OPEN FRIDGE was picked. Purely a
-  // visual gut-check — actual scoring runs on the generic shelf engine.
-  const coldPct = useMemo(() => {
-    let pct = 100
-    items.forEach((it, i) => {
-      if (i > index) return
-      pct -= 8
-      if (placements[it.id] === 'open') pct -= 28
-    })
-    return Math.max(4, Math.min(100, pct))
-  }, [items, placements, index])
+  // Calculate status for current stage (designed like Level 34)
+  const stageMeta = useMemo(() => {
+    const hrs = item.hours || (index === 0 ? 1 : index === 1 ? 3 : 5)
+    if (hrs <= 1) {
+      return {
+        color: 'green',
+        label: 'SAFE WINDOW',
+      }
+    }
+    if (hrs <= 3) {
+      return {
+        color: 'yellow',
+        label: 'WARNING',
+      }
+    }
+    return {
+      color: 'red',
+      label: '🔴 MALFUNCTION',
+    }
+  }, [item.hours, index])
 
   const go = (dir) => {
     setIndex((i) => (i + dir + items.length) % items.length)
@@ -63,37 +77,50 @@ export default function BlackoutScene({ items, placements, reveal, onChoose }) {
 
   return (
     <div className="bo-wrap">
+      {/* ----- Refrigerator Status Header Capsule — Level 34 vibe ----- */}
+      <div className="bo-status">
+        <div className={'bo-status-main is-' + stageMeta.color}>
+          <span className="bo-status-title">MAIN REFRIGERATOR</span>
+          <span className="bo-status-temp">{item.timerValue} {item.timerUnit}</span>
+          <span className="bo-status-label">{stageMeta.label}</span>
+        </div>
+      </div>
+
       <button type="button" className="bo-arrow" onClick={() => go(-1)} aria-label="Previous stage">
         ‹
       </button>
 
-      <div className={'bo-card' + (mark === 'correct' ? ' is-correct' : '') + (mark === 'wrong' ? ' is-wrong' : '')}>
-        {mark && (
-          <span className={`bo-mark ${mark === 'correct' ? 'is-ok' : 'is-no'}`}>
-            {mark === 'correct' ? '✓' : '✗'}
-          </span>
-        )}
-
-        {/* ----- Headline: big digital "Power Out" readout ----- */}
-        <div className="bo-timer-big">
-          <span className="bo-timer-caption">
-            <span className="bo-timer-dot" />
-            POWER OUT
-          </span>
-          <span className="bo-timer-value">
-            {item.timerValue}
-            <span className="bo-timer-unit">{item.timerUnit}</span>
-          </span>
-        </div>
-
-        {/* ----- The fridge itself: a real openable door ----- */}
-        <div className={'bo-fridge-stage' + (movedOut ? ' is-moved-out' : '')}>
+      {/* ----- Top Area: Enlarged Refrigerator Illustration ----- */}
+      <div className="bo-fridge-area">
+        <div className="bo-fridge-stage">
           <div className={`bo-fridge-case dim-${dimLevel}`}>
             <div className="bo-fridge-cavity">
               <span className="bo-fridge-shelf" />
               <span className="bo-fridge-shelf" />
-              <span className="bo-fridge-bulb" aria-hidden="true">💡</span>
-              {doorOpen && <span className="bo-fridge-lightoff">Light: OFF</span>}
+              {doorOpen && (
+                <>
+                  <div className="bo-fridge-food-row row-1">
+                    <div className="bo-food-card">
+                      <span className="bo-food-icon">🥛</span>
+                      <span className="bo-food-name">Milk</span>
+                    </div>
+                    <div className="bo-food-card">
+                      <span className="bo-food-icon">🥗</span>
+                      <span className="bo-food-name">Salad</span>
+                    </div>
+                  </div>
+                  <div className="bo-fridge-food-row row-2">
+                    <div className="bo-food-card">
+                      <span className="bo-food-icon">🥩</span>
+                      <span className="bo-food-name">Raw Meat</span>
+                    </div>
+                    <div className="bo-food-card">
+                      <span className="bo-food-icon">🍲</span>
+                      <span className="bo-food-name">Cooked Soup</span>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="bo-fridge-hinge bo-fridge-hinge-top" />
             <div className="bo-fridge-hinge bo-fridge-hinge-bottom" />
@@ -101,12 +128,6 @@ export default function BlackoutScene({ items, placements, reveal, onChoose }) {
               <span className="bo-fridge-handle" />
             </div>
           </div>
-          {movedOut && (
-            <div className="bo-cooler">
-              <span className="bo-cooler-icon">🧊</span>
-              <span className="bo-cooler-label">Ice Cooler</span>
-            </div>
-          )}
         </div>
 
         {doorOpen && (
@@ -115,22 +136,26 @@ export default function BlackoutScene({ items, placements, reveal, onChoose }) {
           </div>
         )}
 
-        <div className="bo-meter">
-          <div className="bo-meter-label">
-            <span>❄️ Cold Meter</span>
-            <span>{coldPct}%</span>
-          </div>
-          <div className="bo-meter-track">
-            <div
-              className={'bo-meter-fill' + (coldPct < 35 ? ' is-low' : coldPct < 70 ? ' is-mid' : '')}
-              style={{ width: `${coldPct}%` }}
-            />
-          </div>
-        </div>
+      </div>
 
-        {item.tempInfo && (
-          <div className="bo-tempinfo">🌡️ {item.tempInfo}</div>
+      {/* ----- Question Card — EXACT match to user mockup ----- */}
+      <div className={'bo-card' + (mark === 'correct' ? ' is-correct' : '') + (mark === 'wrong' ? ' is-wrong' : '')}>
+        {mark && (
+          <span className={`bo-mark ${mark === 'correct' ? 'is-ok' : 'is-no'}`}>
+            {mark === 'correct' ? '✓' : '✗'}
+          </span>
         )}
+
+        <h3 className="bo-q-title">
+          {index === 0
+            ? 'What should you do first?'
+            : index === 1
+              ? 'What should you do next?'
+              : 'What should you do now?'}
+        </h3>
+        <p className="bo-q-sub">
+          The fridge temperature is rising. Protect the food before service
+        </p>
 
         <div className={'bo-actions' + (decided ? ' has-choice' : '')}>
           {BUTTONS.map((b) => (
@@ -142,24 +167,33 @@ export default function BlackoutScene({ items, placements, reveal, onChoose }) {
               onClick={() => choose(b.id)}
             >
               <span className="bo-btn-icon">{b.icon}</span>
-              {b.label.toUpperCase()}
+              <span className="bo-btn-label">
+                {b.id === 'cooler' ? (
+                  <>MOVE TO<br />ICE COOLER</>
+                ) : (
+                  b.label.toUpperCase()
+                )}
+              </span>
             </button>
           ))}
         </div>
 
         {reveal && (
-          <p className="bo-why">
-            {mark === 'correct' ? '✓ Correct — ' : `✗ Should be ${BUTTONS.find((b) => b.id === item.shelf)?.label} — `}
-            {item.why}
-          </p>
+          <div className={`leak-banner bo-banner ${mark === 'correct' ? 'is-success' : 'is-alert'}`}>
+            <span className="leak-banner-icon">{mark === 'correct' ? '✓' : '⚠️'}</span>
+            <span className="leak-banner-text">
+              <b>{mark === 'correct' ? '✓ Correct — ' : `✗ Should be ${BUTTONS.find((b) => b.id === item.shelf)?.label} — `}</b>
+              {item.why}
+            </span>
+          </div>
         )}
-        {!reveal && !decided && (
-          <span className="bo-hint">Decide what to do as the outage stretches on</span>
-        )}
+
         {!reveal && decided && !isLast && (
-          <button type="button" className="bo-next-btn" onClick={() => go(1)}>
-            Next Stage →
-          </button>
+          <div className="bo-next-wrap">
+            <button type="button" className="bo-next-btn" onClick={() => go(1)}>
+              Next Stage →
+            </button>
+          </div>
         )}
       </div>
 

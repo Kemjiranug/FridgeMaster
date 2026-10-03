@@ -1,6 +1,7 @@
 import checkIcon from '../../assets/level34/check.svg'
 import moveIcon from '../../assets/level34/move.svg'
 import recordIcon from '../../assets/level34/record.svg'
+import fridgeDownStoryImg from '../../assets/level34/fridge-down-story.jpg'
 
 // Level 34 — "Cold Storage Emergency": Hospital Nutrition Unit, 10:30am.
 // One fridge has broken down mid-service. `layout: 'coldemergency'` renders
@@ -57,13 +58,14 @@ export const LIVE_TEMP_STEPS = [
 // Deeper history shown only when the player opens the TEMPERATURE LOG
 // button — deliberately a few readings further back than the live readout,
 // so the log rewards actually opening it instead of just repeating what's
-// already on screen.
+export const INCIDENT_DATE = '12/10'
+
 export const HISTORY_LOG = [
-  { t: '09:30', c: 4 },
-  { t: '09:50', c: 5 },
-  { t: '10:10', c: 6 },
-  { t: '10:20', c: 7 },
-  { t: '10:30', c: 8 },
+  { d: '12/10', t: '09:30', c: 4 },
+  { d: '12/10', t: '09:50', c: 5 },
+  { d: '12/10', t: '10:10', c: 6 },
+  { d: '12/10', t: '10:20', c: 7 },
+  { d: '12/10', t: '10:30', c: 8 },
 ]
 
 // Correct-option ids per stage, with display names for the results recap
@@ -114,6 +116,7 @@ export const SEQUENCE_CARDS = [
 // Fixed fields shown (and "saved") on the Record stage — the numbers are
 // the scenario's own facts, not something the player has to guess.
 export const RECORD_FIELDS = [
+  { label: 'Date', value: '12/10' },
   { label: 'Time detected', value: '10:30' },
   { label: 'Initial temperature', value: '5°C' },
   { label: 'Highest observed temperature', value: '8°C' },
@@ -138,15 +141,11 @@ export const COLD_CHAIN_STATUS = [
 export const STORY = {
   setting: 'Hospital Nutrition Unit \u00b7 10:30 AM',
   title: 'Fridge Down \u2014 Mid Service!',
+  img: fridgeDownStoryImg,
   sub: "You're prepping lunch trays when Fridge 2's display starts climbing.",
   caption: "It's not a spike \u2014 it's a slow, steady drift upward,",
   highlight: 'and lunch service is not going to wait.',
-  cta: "See What's Inside \u2192",
-  beat2: {
-    title: 'Fridge 2 \u2014 Current Stock',
-    sub: "Before you decide anything, here's exactly what's in there right now.",
-    cta: "Let's Handle It! \u2192",
-  },
+  cta: "Let's Handle It! \u2192",
 }
 
 export const TIPS = [
@@ -212,7 +211,7 @@ export default {
       stage: 'move',
       shelf: 'l34-move-rte-first',
       foods: FOODS,
-      question: 'The backup fridge has limited space. Drag or tap each food to sort it — which go to the backup fridge first, and which can wait in the insulated cold box?',
+      question: '',
       options: [
         {
           id: 'l34-move-rte-first',

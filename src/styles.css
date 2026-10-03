@@ -365,6 +365,15 @@ button { font-family: inherit; cursor: pointer; border: none; }
   background: linear-gradient(180deg, #eaf6f0, #f8f4e6); border-radius: 22px; padding: 14px;
   object-fit: contain; /* keeps supermarket.png's own aspect ratio */
 }
+.story-scene--photo {
+  padding: 0;
+  background: none;
+  max-height: 300px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
 .story-title { color: var(--green-dark); font-weight: 900; font-size: 32px; line-height: 1.15; letter-spacing: -.4px; margin: 0 0 12px; }
 .story-sub { color: var(--ink); font-weight: 700; font-size: 16px; line-height: 1.5; max-width: 440px; margin: 0 auto 14px; }
 .story-caption { color: var(--muted); font-weight: 600; font-size: 15px; line-height: 1.6; max-width: 400px; margin: 0 auto 28px; }
@@ -4540,11 +4549,11 @@ body.has-hospital-bg .audit-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   width: 100%;
-  max-width: 480px;
+  max-width: 580px;
   margin: 0 auto;
-  padding: 0 66px;
+  padding: 0 54px;
 }
 
 .bo-arrow {
@@ -4564,33 +4573,66 @@ body.has-hospital-bg .audit-header {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 .bo-arrow:hover { filter: brightness(1.03); }
 .bo-arrow:active { transform: translateY(-50%) translateY(2px); box-shadow: 0 2px 0 var(--yellow-shadow); }
 .bo-wrap > .bo-arrow:first-of-type { left: 0; }
 .bo-wrap > .bo-arrow:last-of-type { right: 0; }
 
+.bo-fridge-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
 .bo-card {
   position: relative;
   width: 100%;
   background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-radius: 26px;
-  padding: 24px 24px 26px;
+  border: 2px solid #6ee7b7;
+  border-radius: 28px;
+  padding: 24px 26px 22px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 10px 30px rgba(44, 55, 66, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  align-items: flex-start;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+  transition: all 0.25s ease;
 }
 
-.bo-card.is-correct { border-color: #10b981; box-shadow: 0 0 0 3px #10b981, 0 10px 30px rgba(16, 185, 129, 0.15); }
-.bo-card.is-wrong { border-color: #e4573b; box-shadow: 0 0 0 3px #e4573b, 0 10px 30px rgba(228, 87, 34, 0.15); }
+.bo-card.is-correct {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+.bo-card.is-wrong {
+  border-color: #e4573b;
+  box-shadow: 0 0 0 3px rgba(228, 87, 59, 0.2), 0 10px 30px rgba(228, 87, 59, 0.15);
+}
+
+.bo-q-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #065f46;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.bo-q-sub {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #047857;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
 
 .bo-mark {
   position: absolute;
-  top: 12px;
-  right: 14px;
+  top: 18px;
+  right: 20px;
   font-size: 20px;
   font-weight: 900;
   z-index: 3;
@@ -4598,43 +4640,93 @@ body.has-hospital-bg .audit-header {
 .bo-mark.is-ok { color: #10b981; }
 .bo-mark.is-no { color: #e4573b; }
 
-/* ----- Headline digital readout ----- */
-.bo-timer-big {
+/* ----- Persistent status header — EXACT match to Level 34 .ce-status ----- */
+.bo-status {
+  width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 8px 16px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  box-shadow: 0 4px 14px rgba(44, 55, 66, 0.06);
+  z-index: 10;
 }
-.bo-timer-caption {
+
+.bo-status-main {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.bo-status-title {
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  color: #64748b;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bo-status-temp {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+}
+
+.bo-status-label {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  white-space: nowrap;
+}
+
+.bo-status-main.is-green .bo-status-temp { color: #059669; }
+.bo-status-main.is-green .bo-status-label { background: #ecfdf5; color: #059669; }
+
+.bo-status-main.is-yellow .bo-status-temp { color: #d97706; }
+.bo-status-main.is-yellow .bo-status-label { background: #fffbeb; color: #d97706; }
+
+.bo-status-main.is-red .bo-status-temp { color: #e4573b; }
+.bo-status-main.is-red .bo-status-label {
+  background: #fee2e2;
+  color: #991b1b;
+  animation: ce-pulse 1s ease-in-out infinite;
+}
+
+.bo-status-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Right dark pill — EXACT match to .ce-log-btn in Level 34 */
+.bo-status-pill-badge {
+  border: none;
+  background: #1e293b;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(30, 41, 59, 0.2);
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: .12em;
-  color: #e4573b;
-}
-.bo-timer-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #e4573b;
-  box-shadow: 0 0 8px 2px rgba(228, 87, 34, 0.5);
-  animation: bo-blink 1s ease-in-out infinite;
-}
-@keyframes bo-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-.bo-timer-value {
-  font-size: 46px;
-  font-weight: 900;
-  color: #1e293b;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.bo-timer-unit {
-  font-size: 18px;
-  font-weight: 800;
-  color: #64748b;
-  margin-left: 5px;
+  white-space: nowrap;
 }
 
 /* ----- The fridge illustration ----- */
@@ -4642,38 +4734,38 @@ body.has-hospital-bg .audit-header {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 18px;
+  gap: 22px;
   perspective: 900px;
 }
 
 .bo-fridge-case {
   position: relative;
-  width: 132px;
-  height: 172px;
-  border-radius: 16px;
+  width: 250px;
+  height: 326px;
+  border-radius: 26px;
   background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-  border: 1.5px solid #cbd5e1;
-  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.08), 0 10px 18px rgba(0, 0, 0, 0.12);
-  padding: 8px;
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.07), 0 18px 32px rgba(0, 0, 0, 0.12);
+  padding: 14px;
   transition: filter 0.4s ease;
 }
 .bo-fridge-case::after {
   /* little feet */
   content: '';
   position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: -5px;
-  height: 5px;
+  left: 24px;
+  right: 24px;
+  bottom: -8px;
+  height: 8px;
   background: #9aa3ab;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 8px 8px;
 }
 
 .bo-fridge-cavity {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 16px;
   background: linear-gradient(180deg, #dff3ff 0%, #bfe6fb 100%);
   overflow: hidden;
   transition: background 0.5s ease;
@@ -4683,65 +4775,87 @@ body.has-hospital-bg .audit-header {
 
 .bo-fridge-shelf {
   position: absolute;
+  left: 14px;
+  right: 14px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+}
+.bo-fridge-shelf:nth-of-type(1) { top: 106px; }
+.bo-fridge-shelf:nth-of-type(2) { top: 202px; }
+
+.bo-fridge-food-row {
+  position: absolute;
   left: 8px;
   right: 8px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.75);
-  border-radius: 2px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  z-index: 1;
 }
-.bo-fridge-shelf:nth-of-type(1) { top: 58px; }
-.bo-fridge-shelf:nth-of-type(2) { top: 106px; }
-
-.bo-fridge-bulb {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 13px;
-  filter: grayscale(1) brightness(0.6);
-  opacity: 0.55;
+.bo-fridge-food-row.row-1 {
+  top: 42px;
+  height: 62px;
 }
-.bo-fridge-case.dim-0 .bo-fridge-bulb {
-  filter: none;
-  opacity: 1;
-  text-shadow: 0 0 10px rgba(255, 226, 138, 0.9);
+.bo-fridge-food-row.row-2 {
+  top: 138px;
+  height: 62px;
 }
 
-.bo-fridge-lightoff {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: .04em;
-  color: #b91c1c;
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  border-radius: 999px;
-  padding: 3px 8px;
+.bo-food-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 8px;
+  width: 78px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.bo-food-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+  border-color: #94a3b8;
+}
+
+.bo-food-icon {
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.bo-food-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: #1e293b;
+  text-align: center;
   white-space: nowrap;
+  line-height: 1.15;
 }
 
 .bo-fridge-hinge {
   position: absolute;
-  left: 5px;
-  width: 6px;
-  height: 14px;
-  border-radius: 3px;
+  left: 8px;
+  width: 10px;
+  height: 24px;
+  border-radius: 5px;
   background: #9aa3ab;
   z-index: 1;
 }
-.bo-fridge-hinge-top { top: 14px; }
-.bo-fridge-hinge-bottom { bottom: 14px; }
+.bo-fridge-hinge-top { top: 24px; }
+.bo-fridge-hinge-bottom { bottom: 24px; }
 
 .bo-fridge-door {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  border-radius: 10px;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  border-radius: 16px;
   background: linear-gradient(180deg, #ffffff 0%, #eef1f4 100%);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), 2px 0 6px rgba(0, 0, 0, 0.12);
   transform-origin: left center;
@@ -4756,10 +4870,10 @@ body.has-hospital-bg .audit-header {
 .bo-fridge-handle {
   position: absolute;
   top: 50%;
-  right: 8px;
-  width: 5px;
-  height: 46px;
-  border-radius: 3px;
+  right: 14px;
+  width: 7px;
+  height: 72px;
+  border-radius: 4px;
   background: #b7bfc7;
   transform: translateY(-50%);
 }
@@ -4768,12 +4882,12 @@ body.has-hospital-bg .audit-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   animation: bo-pop-in 0.35s ease both;
 }
-.bo-cooler-icon { font-size: 34px; }
+.bo-cooler-icon { font-size: 44px; }
 .bo-cooler-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   color: #0369a1;
   letter-spacing: .04em;
@@ -4833,40 +4947,79 @@ body.has-hospital-bg .audit-header {
 
 .bo-actions {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  gap: 12px;
   width: 100%;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .bo-btn {
-  padding: 14px 0;
-  border: 3px solid transparent;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: .02em;
-  color: #fff;
-  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+  min-height: 86px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: transform 0.1s ease, background 0.12s ease, color 0.12s ease;
+  padding: 14px 6px;
+  background: #ffffff;
+  border: 2px solid #7dd3fc;
+  border-radius: 16px;
+  color: #0284c7;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.06);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
 }
-.bo-btn-icon { font-size: 18px; }
-.bo-btn:not(:disabled):hover { transform: translateY(-1px); }
-.bo-btn:not(:disabled):active { transform: translateY(1px); }
-.bo-btn:disabled { cursor: default; }
 
-.bo-btn-open { background: #dc2626; border-color: #dc2626; }
-.bo-btn-closed { background: #059669; border-color: #059669; }
-.bo-btn-cooler { background: #0284c7; border-color: #0284c7; }
-.bo-btn.is-selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px currentColor, 0 4px 10px rgba(0, 0, 0, 0.12); transform: translateY(-1px); }
-.bo-btn-open.is-selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px #dc2626, 0 4px 10px rgba(0, 0, 0, 0.12); }
-.bo-btn-closed.is-selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px #059669, 0 4px 10px rgba(0, 0, 0, 0.12); }
-.bo-btn-cooler.is-selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px #0284c7, 0 4px 10px rgba(0, 0, 0, 0.12); }
-.bo-actions.has-choice .bo-btn:not(.is-selected) { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; opacity: 0.65; }
+.bo-btn-icon {
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bo-btn-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-align: center;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.bo-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.16);
+}
+
+.bo-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Selected state: exactly matching mockup's solid deep teal */
+.bo-btn.is-selected {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 118, 110, 0.32);
+}
+
+.bo-btn.is-selected .bo-btn-icon {
+  transform: scale(1.08);
+}
+
+.bo-next-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
 
 .bo-why {
   margin: 4px 0 0;
@@ -4888,6 +5041,23 @@ body.has-hospital-bg .audit-header {
   background: #e0f2fe;
   padding: 4px 12px;
   border-radius: 999px;
+}
+
+.bo-banner {
+  margin: 2px 0 0;
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 14px;
+  font-size: clamp(11.5px, 2.7vw, 13.5px);
+  z-index: 5;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.bo-banner.is-warn .leak-banner-text,
+.bo-banner.is-action .leak-banner-text {
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .bo-next-btn {
@@ -4924,10 +5094,34 @@ body.has-hospital-bg .audit-header {
 .bo-dot.is-decided:not(.is-active) { background: #a9c9bf; }
 
 @media (max-width: 480px) {
-  .bo-wrap { padding: 0 48px; }
-  .bo-arrow { width: 34px; height: 34px; font-size: 17px; }
-  .bo-fridge-case { width: 112px; height: 148px; }
-  .bo-timer-value { font-size: 36px; }
+  .bo-wrap { padding: 0 34px; gap: 14px; }
+  .bo-arrow { width: 30px; height: 30px; font-size: 15px; }
+  .bo-status {
+    padding: 6px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .bo-status-temp { font-size: 16px; }
+  .bo-status-title { font-size: 9.5px; }
+  .bo-status-label { font-size: 10px; padding: 2px 6px; }
+  .bo-fridge-case { width: 196px; height: 256px; padding: 11px; }
+  .bo-fridge-shelf:nth-of-type(1) { top: 82px; }
+  .bo-fridge-shelf:nth-of-type(2) { top: 158px; }
+  .bo-fridge-food-row { left: 4px; right: 4px; }
+  .bo-fridge-food-row.row-1 { top: 30px; height: 50px; }
+  .bo-fridge-food-row.row-2 { top: 106px; height: 50px; }
+  .bo-food-card { width: 66px; padding: 4px 4px; border-radius: 9px; gap: 2px; }
+  .bo-food-icon { font-size: 19px; }
+  .bo-food-name { font-size: 9.5px; }
+  .bo-fridge-handle { height: 56px; }
+  .bo-card { padding: 18px 16px 18px; border-radius: 22px; }
+  .bo-q-title { font-size: 18px; }
+  .bo-q-sub { font-size: 13px; margin-bottom: 12px; }
+  .bo-actions { gap: 8px; }
+  .bo-btn { min-height: 74px; padding: 10px 4px; gap: 6px; border-radius: 14px; }
+  .bo-btn-icon { font-size: 20px; }
+  .bo-btn-label { font-size: 9.5px; }
 }
 
 
@@ -7105,120 +7299,377 @@ body.has-hospital-bg .audit-header {
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
 }
 
-.ce-move-hint-bar {
-  font-size: 12px;
-  font-weight: 700;
-  color: #475569;
-  text-align: center;
-  padding: 2px 0;
-}
-
-.ce-hint-active {
-  color: #0f766e;
-  font-weight: 800;
+.ce-move-banner {
+  max-width: 480px;
+  margin: 0 auto 4px;
+  padding: 10px 18px;
+  font-size: 13.5px;
 }
 
 .ce-move-destinations {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .ce-dest-card {
-  flex: 1;
-  border-radius: 16px;
-  padding: 12px;
+  flex: 0 0 170px;
+  width: 170px;
+  max-width: 170px;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
-  border: 2px solid;
+  background: transparent;
+  border: none;
+  box-shadow: none;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-.ce-dest-backup {
-  background: #f0f9ff;
-  border-color: #7dd3fc;
+.ce-dest-card:hover {
+  transform: translateY(-2px);
 }
 
-.ce-dest-backup.is-droppable {
-  border-color: #0284c7;
-  background: #e0f2fe;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+/* Destination Cards & Interior Unit Layout */
+.ce-dest-card.is-droppable .ce-dest-fridge-body,
+.ce-dest-card.is-droppable .ce-friendly-cooler {
+  filter: drop-shadow(0 0 16px rgba(14, 165, 233, 0.7));
+  transform: scale(1.03);
 }
 
-.ce-dest-coldbox {
-  background: #fffbeb;
-  border-color: #fcd34d;
-}
-
-.ce-dest-coldbox.is-droppable {
-  border-color: #d97706;
-  background: #fef3c7;
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
-}
-
-.ce-dest-head {
+/* 1. Backup Fridge (ตู้เย็นชั้น) */
+.ce-dest-fridge-body {
+  position: relative;
+  width: 170px;
+  height: 230px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 2.5px solid #cbd5e1;
+  background: #f8fafc;
   display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.ce-dest-fridge-photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.ce-dest-fridge-interior {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 6px 36px;
+}
+
+.ce-dest-fridge-shelves-zone {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.ce-dest-mini-shelf {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 42px;
+}
+
+.ce-dest-empty-shelf-slot {
+  width: 64px;
+  height: 32px;
+  border: 1.5px dashed rgba(148, 163, 184, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.ce-dest-card.is-droppable .ce-dest-empty-shelf-slot {
+  border-color: rgba(59, 130, 246, 0.7);
+  background: rgba(219, 234, 254, 0.45);
+}
+
+/* 2. Insulated Cold Box (ถังน้ำแข็งแบบ User-Friendly) */
+.ce-friendly-cooler {
+  position: relative;
+  width: 170px;
+  height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  user-select: none;
+  transition: transform 0.25s ease;
+}
+
+/* Propped open lid standing up at the back */
+.ce-cooler-propped-lid {
+  position: relative;
+  width: 90%;
+  margin: 0 auto -6px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.ce-cooler-lid-body {
+  width: 100%;
+  height: 38px;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+  border-radius: 12px 12px 4px 4px;
+  border: 2px solid #bae6fd;
+  box-shadow: 0 4px 10px rgba(186, 230, 253, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.ce-cooler-lid-handle {
+  width: 36px;
+  height: 5px;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid #bae6fd;
+}
+
+.ce-cooler-lid-text {
+  font-size: 8.5px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #0369a1;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.ce-cooler-lid-hinge {
+  width: 60%;
+  height: 6px;
+  background: #7dd3fc;
+  border-radius: 0 0 3px 3px;
+}
+
+/* Cooler Main Basin - Soft Pastel Ice Blue */
+.ce-cooler-basin {
+  position: relative;
+  width: 100%;
+  height: 195px;
+  background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 55%, #93c5fd 100%);
+  border-radius: 18px;
+  border: 2.5px solid #7dd3fc;
+  box-shadow: 0 8px 24px rgba(147, 197, 253, 0.25), inset 0 2px 6px rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  padding: 8px 6px 6px;
+  z-index: 2;
+  transition: all 0.25s ease;
 }
 
-.ce-dest-title {
+.ce-dest-card.is-droppable .ce-cooler-basin {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.4), 0 10px 24px rgba(56, 189, 248, 0.25);
+}
+
+/* Side handles */
+.ce-cooler-side-handle {
+  position: absolute;
+  top: 45%;
+  width: 6px;
+  height: 28px;
+  background: #ffffff;
+  border: 1px solid #bae6fd;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.ce-cooler-side-handle.is-left { left: -3px; }
+.ce-cooler-side-handle.is-right { right: -3px; }
+
+/* Ice chamber interior - Crisp clean white & ice */
+.ce-cooler-ice-chamber {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 45%, #e0f2fe 100%);
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: inset 0 3px 10px rgba(14, 165, 233, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 6px;
+  overflow: hidden;
+}
+
+/* 2 Ice slots */
+.ce-cooler-slots-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  z-index: 2;
+}
+
+.ce-cooler-slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+}
+
+.ce-ice-empty-pad {
+  width: 64px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1.5px dashed #7dd3fc;
+  background: rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  box-shadow: 0 1px 4px rgba(14, 165, 233, 0.08);
+  transition: all 0.2s ease;
+}
+
+.ce-dest-card.is-droppable .ce-ice-empty-pad {
+  border-color: #0284c7;
+  background: rgba(224, 242, 254, 0.95);
+  transform: scale(1.05);
+}
+
+/* Ice bed footer */
+.ce-ice-bed-footer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  font-size: 14px;
+  opacity: 0.9;
+  filter: drop-shadow(0 1px 3px rgba(14, 165, 233, 0.2));
+  pointer-events: none;
+  padding-bottom: 2px;
+}
+
+/* Floating cold vapors */
+.ce-cooler-vapor-wrap {
+  position: absolute;
+  top: -4px;
+  left: 10%;
+  right: 10%;
+  height: 18px;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+  z-index: 4;
+}
+
+@keyframes cold-vapor-float {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-5px) scale(1.1); opacity: 0.35; }
+  100% { transform: translateY(0) scale(1); opacity: 0.8; }
+}
+
+.ce-cold-vapor {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(224, 242, 254, 0.9);
+  box-shadow: 0 0 10px 4px rgba(186, 230, 253, 0.95);
+  animation: cold-vapor-float 2.2s ease-in-out infinite;
+}
+.ce-cold-vapor.v2 { animation-delay: 0.7s; }
+.ce-cold-vapor.v3 { animation-delay: 1.4s; }
+
+/* Food items inside destination containers */
+.ce-real-food.is-in-zone {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--ink);
+  gap: 5px;
+  padding: 4px 8px;
+  min-width: 0;
+  max-width: 96%;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+  animation: foodPlaceIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-.ce-dest-icon {
-  font-size: 20px;
+@keyframes foodPlaceIn {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.ce-real-food.is-in-zone:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+  background: #ffffff;
+}
+
+.ce-real-food.is-in-zone .ce-real-food-icon {
+  font-size: 17px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ce-real-food.is-in-zone .ce-real-food-name {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ce-dest-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.ce-dest-label b {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.01em;
 }
 
 .ce-dest-sub {
-  display: block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: #64748b;
-}
-
-.ce-dest-badge {
-  font-size: 11px;
-  font-weight: 900;
-  background: #ffffff;
-  padding: 3px 8px;
-  border-radius: 999px;
-  border: 1px solid #cbd5e1;
-  color: #334155;
-}
-
-.ce-dest-badge.is-full-badge {
-  background: #d1fae5;
-  border-color: #6ee7b7;
-  color: #065f46;
-}
-
-.ce-dest-slots {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  min-height: 58px;
-  align-items: center;
-}
-
-.ce-dest-empty-slot {
-  flex: 1;
-  min-width: 60px;
-  min-height: 52px;
-  border: 1.5px dashed #cbd5e1;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #94a3b8;
 }
 
 /* Digital badge for fridge in step 1 */
@@ -7270,43 +7721,186 @@ body.has-hospital-bg .audit-header {
 .ce-hero-fridge { position: relative; height: 120px; width: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12)); }
 .ce-mainzone-fridge { height: 46px; width: auto; opacity: 0.9; margin-bottom: -2px; }
 
-/* Protect stage: sealed / open fridge box, built on the same fridge photo */
-.ce-panel-protect { align-items: center; }
+/* Protect stage: sealed / open fridge box, built on the fridge photo */
+.ce-panel-protect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 2px;
+  width: 100%;
+}
+
 .ce-fridgebox {
   position: relative;
-  width: 92px;
-  height: 100px;
-  border-radius: 10px;
+  width: 190px;
+  height: 235px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #e2e8f0;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.08);
+  background: #1e293b;
+  border: 3px solid #cbd5e1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.14), inset 0 0 14px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
+  perspective: 700px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.ce-fridgebox.is-small { width: 46px; height: 50px; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08); }
+
+.ce-fridgebox.is-ajar {
+  cursor: pointer;
+}
+.ce-fridgebox.is-ajar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+  border-color: #94a3b8;
+}
+
+.ce-fridgebox.is-small {
+  width: 62px;
+  height: 76px;
+  border-radius: 8px;
+  border-width: 2px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 .ce-fridgebox-art {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center;
+  opacity: 0.92;
 }
+
 .ce-fridgebox-door {
   position: absolute;
   inset: 0;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.5s ease;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 45%, #cbd5e1 100%);
+  box-shadow: inset -2px 0 6px rgba(0, 0, 0, 0.08), inset 2px 0 6px rgba(255, 255, 255, 0.9), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-origin: left center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 12px;
+}
+
+.ce-fridgebox-handle {
+  position: absolute;
+  top: 38%;
+  right: 10px;
+  width: 7px;
+  height: 52px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #94a3b8 0%, #e2e8f0 50%, #64748b 100%);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.ce-fridgebox.is-small .ce-fridgebox-handle {
+  right: 4px;
+  top: 35%;
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+}
+
+/* Door states */
+.ce-fridgebox.is-open .ce-fridgebox-door {
+  transform: rotateY(-95deg);
+  box-shadow: -8px 0 16px rgba(0, 0, 0, 0.25);
+}
+.ce-fridgebox.is-ajar .ce-fridgebox-door {
+  transform: rotateY(-28deg);
+  box-shadow: -5px 0 12px rgba(0, 0, 0, 0.18);
+}
+.ce-fridgebox.is-reuse .ce-fridgebox-door {
+  transform: rotateY(-36deg);
+}
+.ce-fridgebox.is-sealed .ce-fridgebox-door {
+  transform: rotateY(0deg);
+}
+
+/* Official Out of Service sticker requested by user */
+.ce-sticker-stamp-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: stickerStamp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
-.ce-fridgebox.is-open .ce-fridgebox-door { transform: rotateY(-100deg); }
+
+@keyframes stickerStamp {
+  0% {
+    transform: scale(1.6) rotate(-8deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(0.95) rotate(-1.5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-1.5deg);
+    opacity: 1;
+  }
+}
+
+.ce-sticker-out-img {
+  width: 154px;
+  max-width: 90%;
+  height: auto;
+  border-radius: 6px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.32));
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ce-sticker-out-img.is-small {
+  width: 48px;
+  max-width: 90%;
+  border-radius: 3px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.ce-opt-tag-icon {
+  width: 32px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  display: block;
+}
+
+.ce-protect-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.ce-protect-status-pill.is-sealed {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1.5px solid #fecaca;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+}
+.ce-protect-status-pill.is-warn {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1.5px solid #fde68a;
+}
+.ce-protect-status-pill.is-hint {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
 .ce-sticker {
   font-size: 9px;
   line-height: 1.2;
@@ -7319,8 +7913,28 @@ body.has-hospital-bg .audit-header {
   padding: 4px 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
-.ce-sticker-warn { background: #fbbf24; color: #78350f; font-size: 14px; padding: 3px 6px; }
-.ce-escape-note { position: absolute; bottom: -10px; font-size: 10px; font-weight: 900; color: #dc2626; white-space: nowrap; }
+.ce-sticker-warn {
+  background: #fbbf24;
+  color: #78350f;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #f59e0b;
+}
+.ce-escape-note {
+  position: absolute;
+  bottom: 8px;
+  font-size: 11px;
+  font-weight: 900;
+  color: #dc2626;
+  white-space: nowrap;
+  background: rgba(254, 226, 226, 0.95);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #fca5a5;
+  z-index: 3;
+}
 
 /* Report stage: phone + notified targets */
 .ce-panel-report { align-items: center; }
@@ -7429,9 +8043,57 @@ body.has-hospital-bg .audit-header {
 
 /* Record stage: real fill-in-the-log form */
 .ce-recordform { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-.ce-recordform-head { display: flex; flex-direction: column; gap: 2px; text-align: center; }
+.ce-recordform-head { display: flex; flex-direction: column; gap: 4px; text-align: center; align-items: center; }
 .ce-recordform-title { font-size: 15px; font-weight: 900; color: var(--ink); }
 .ce-recordform-sub { font-size: 11px; font-weight: 700; color: #64748b; }
+.ce-recordform-openlog-btn {
+  background: #f0fdfa;
+  border: 1.5px solid var(--teal, #0f766e);
+  color: #0f766e;
+  font-size: 11.5px;
+  font-weight: 800;
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 2px;
+  transition: all 0.15s ease;
+}
+.ce-recordform-openlog-btn:hover {
+  background: #ccfbf1;
+  transform: translateY(-1px);
+}
+.ce-recordform-error {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+.ce-recordform-reference {
+  font-size: 11.5px;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 6px 10px;
+  line-height: 1.4;
+  text-align: center;
+}
+.ce-recordform-reference code {
+  font-weight: 900;
+  color: #0c4a6e;
+  background: #e0f2fe;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
 .ce-recordform-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 800; color: #334155; }
 .ce-recordform-row input {
   flex: 1;
@@ -7590,12 +8252,77 @@ body.has-hospital-bg .audit-header {
 .ce-bigtemp.is-red .ce-bigtemp-status { background: #fee2e2; color: #991b1b; }
 
 /* ----- Temperature Log modal ----- */
-.ce-logmodal { background: #fff; border-radius: 20px; padding: 20px; width: min(360px, 86vw); display: flex; flex-direction: column; gap: 10px; }
+.ce-logmodal { background: #fff; border-radius: 20px; padding: 20px; width: min(400px, 92vw); max-height: 85vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
+.ce-logmodal-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.ce-logmodal-title-wrap { display: flex; flex-direction: column; gap: 3px; }
 .ce-logmodal h3 { margin: 0; font-size: 16px; font-weight: 900; color: var(--ink); }
-.ce-logmodal-warn { margin: 0; font-size: 12px; font-weight: 700; color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; }
+.ce-logmodal-unit-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #0284c7; background: #f0f9ff; border: 1px solid #bae6fd; padding: 2px 7px; border-radius: 6px; width: fit-content; }
+.ce-logmodal-date-badge { font-size: 12px; font-weight: 800; color: #0369a1; background: #e0f2fe; border: 1.5px solid #bae6fd; padding: 4px 10px; border-radius: 999px; }
+.ce-logmodal-warn { margin: 0; font-size: 12px; font-weight: 700; color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 8px 10px; line-height: 1.4; }
 .ce-logmodal-graph { width: 100%; height: 60px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
 .ce-logmodal-rows { display: flex; flex-direction: column; gap: 4px; }
-.ce-logmodal-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: #334155; background: #f8fafc; border-radius: 8px; padding: 5px 10px; }
+.ce-logmodal-table-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; padding: 2px 10px; }
+.ce-logmodal-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 800; color: #334155; background: #f8fafc; border-radius: 8px; padding: 6px 10px; }
+.ce-logmodal-row.is-alert-row { background: #fef2f2; border: 1px solid #fecaca; }
+.ce-logmodal-cell-time { display: inline-flex; align-items: center; gap: 8px; }
+.ce-logmodal-cell-date { color: #0284c7; background: #e0f2fe; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+.ce-logmodal-row b.is-danger { color: #dc2626; display: inline-flex; align-items: center; gap: 5px; }
+.ce-logmodal-badge-danger { font-size: 9px; font-weight: 900; background: #fee2e2; color: #b91c1c; border: 1px solid #f87171; border-radius: 4px; padding: 1px 4px; letter-spacing: 0.04em; }
+
+/* Incident Summary Box inside Log Modal */
+.ce-logmodal-incident-box {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ce-logmodal-incident-title {
+  font-size: 12px;
+  font-weight: 900;
+  color: #166534;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ce-logmodal-incident-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+}
+.ce-logmodal-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ce-info-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.ce-info-val {
+  font-size: 12px;
+  font-weight: 900;
+  color: #1e293b;
+}
+.ce-info-val.is-danger {
+  color: #dc2626;
+}
+.ce-info-val.is-pending {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  font-style: italic;
+}
+.ce-info-val.is-reported {
+  color: #0f766e;
+  font-weight: 900;
+}
+
 .ce-logmodal-ok { margin: 0; font-size: 12px; font-weight: 800; color: #059669; }
 
 /* ----- Sequence puzzle gate ----- */
@@ -7963,3 +8690,783 @@ body.has-hospital-bg .audit-header {
   font-weight: 700;
   color: #92400e;
 }
+
+/* =======================================================================
+   Step 3: Protect Stage (Side-by-Side Mockup Layout)
+   ======================================================================= */
+.ce-wrap.is-step3,
+.ce-wrap.is-step4 {
+  max-width: 1040px;
+  padding: 0 16px;
+}
+
+.ce-step3-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.ce-step3-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  width: 100%;
+  max-width: 960px;
+}
+
+/* Left Column: Big Refrigerator */
+.ce-step3-left {
+  flex: 0 0 436px;
+  max-width: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ce-step3-fridge-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ce-step3-open-wrapper,
+.ce-step3-sealed-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.ce-step3-fridge-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ce-step3-fridge-photo {
+  width: auto;
+  max-width: 100%;
+  height: 480px;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.15));
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.ce-step3-fridge-photo.is-closed {
+  height: 480px;
+  width: auto;
+  display: block;
+  animation: fridgeDoorShut 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fridgeDoorShut {
+  0% {
+    transform: scale(0.95);
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.1));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.18));
+  }
+}
+
+.ce-step3-open-wrapper {
+  cursor: pointer;
+}
+
+.ce-step3-open-wrapper:hover .ce-step3-fridge-photo {
+  transform: scale(1.02);
+}
+
+.ce-step3-sticker-pos {
+  position: absolute;
+  top: 26%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 140px;
+  pointer-events: none;
+}
+
+.ce-step3-sticker-pos .ce-sticker-out-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform-origin: center center;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.28));
+  animation: stickerStamp 0.45s 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.ce-protect-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.ce-protect-status-pill.is-sealed {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  animation: badgePop 0.3s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ce-protect-status-pill.is-warn {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1.5px solid #fde68a;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Right Column: Choices Card */
+.ce-step3-card {
+  flex: 1;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 30px 28px 24px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1.5px solid rgba(226, 232, 240, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.ce-step3-card.is-correct {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2), 0 12px 36px rgba(16, 185, 129, 0.12);
+}
+
+.ce-step3-card.is-wrong {
+  border-color: #e4573b;
+  box-shadow: 0 0 0 3px rgba(228, 87, 59, 0.2), 0 12px 36px rgba(228, 87, 59, 0.12);
+}
+
+.ce-step3-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.ce-step3-sub {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #475569;
+  margin: 0 0 18px;
+  line-height: 1.45;
+}
+
+/* Cyan options box */
+.ce-step3-options-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 14px;
+  background: rgba(236, 254, 255, 0.45);
+  border: 1.5px solid #a5f3fc;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+/* Option Button: Soft cream / yellow pill with radio button */
+.ce-step3-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #fefce8;
+  border: 1.5px solid #fef08a;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(234, 179, 8, 0.08);
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+  outline: none;
+}
+
+.ce-step3-opt-btn:hover {
+  background: #fef9c3;
+  border-color: #fde047;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 10px rgba(234, 179, 8, 0.18);
+}
+
+.ce-step3-opt-btn.is-selected {
+  background: #fef08a;
+  border-color: #eab308;
+  box-shadow: 0 0 0 2.5px rgba(234, 179, 8, 0.35), 0 4px 12px rgba(234, 179, 8, 0.2);
+}
+
+.ce-step3-opt-btn.is-correct {
+  background: #ecfdf5;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2.5px rgba(16, 185, 129, 0.35);
+}
+
+.ce-step3-opt-btn.is-wrong {
+  background: #fef2f2;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2.5px rgba(239, 68, 68, 0.35);
+}
+
+/* Radio button circle */
+.ce-step3-radio {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  border: 2px solid #ca8a04;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.ce-step3-radio.is-active {
+  border-color: #a16207;
+  background: #ffffff;
+}
+
+.ce-step3-radio-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ca8a04;
+}
+
+.ce-step3-opt-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.ce-step4-opt-icon {
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Yellow Next Button at the bottom of the card */
+.ce-step3-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.ce-step3-next-btn {
+  background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+  color: #1c1917;
+  font-size: 16px;
+  font-weight: 900;
+  padding: 11px 48px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(202, 138, 4, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.ce-step3-next-btn:hover {
+  background: linear-gradient(180deg, #fef08a 0%, #ca8a04 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(202, 138, 4, 0.5);
+}
+
+.ce-step3-next-btn:active {
+  transform: translateY(1px);
+}
+
+.ce-step3-warning {
+  margin: 6px 0 10px;
+}
+
+@media (max-width: 768px) {
+  .ce-step3-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .ce-step3-left {
+    flex: none;
+    width: 100%;
+    max-width: 320px;
+  }
+  .ce-step3-fridge-photo {
+    height: 320px;
+  }
+  .ce-step3-card {
+    max-width: 100%;
+    padding: 20px;
+  }
+}
+
+/* =======================================================================
+   Level 31 — "Patient Meal Safe Zone" (Hospital Nutrition Unit RTE Fridge)
+   ======================================================================= */
+.board--patientmeal {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pm-scene {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 10px 20px;
+}
+
+/* Header & Status Capsule */
+.pm-header-wrap {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pm-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.12);
+}
+
+.pm-capsule-badge {
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #0f766e;
+}
+
+.pm-capsule-temp {
+  font-size: 14px;
+  font-weight: 900;
+  color: #0d9488;
+  background: #f0fdfa;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #99f6e4;
+}
+
+.pm-capsule-status {
+  font-size: 11px;
+  font-weight: 800;
+  color: #166534;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.pm-mission-banner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+  border: 1.5px solid #86efac;
+  border-radius: 16px;
+  padding: 12px 18px;
+  box-shadow: 0 4px 12px rgba(22, 101, 52, 0.08);
+}
+
+.pm-mission-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.pm-mission-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pm-mission-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #14532d;
+}
+
+.pm-mission-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: #334155;
+  line-height: 1.4;
+}
+
+/* Stage Area: Original Fridge (Left) + Move Out Box (Right) */
+.pm-stage {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.pm-fridge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pm-fridge-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid #0d9488;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f766e;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.15);
+}
+
+.pm-fridge-status-badge strong {
+  color: #0d9488;
+  font-size: 12px;
+}
+
+.pm-badge-dot {
+  color: #10b981;
+  font-size: 10px;
+  animation: pmPulse 1.8s infinite;
+}
+
+@keyframes pmPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.pm-fridge-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 18px;
+  transition: all 0.2s ease;
+}
+
+.pm-fridge-wrap .fridge-photo {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 240px);
+  min-height: 400px;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 12px 24px rgba(40, 60, 50, 0.2));
+}
+
+.pm-shelf-zone {
+  cursor: pointer;
+}
+
+.pm-shelf-zone .zone-tag {
+  opacity: 1;
+}
+
+.pm-fridge-wrap.is-over {
+  outline: 4px solid #0d9488;
+  box-shadow: 0 0 20px rgba(13, 148, 136, 0.35);
+}
+
+/* Move Out Quarantine Box */
+.pm-box {
+  width: 290px;
+  min-width: 260px;
+  align-self: flex-start;
+  margin-top: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #fff7ed 100%);
+  border: 2px dashed #f97316;
+  border-radius: 24px;
+  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.pm-box.is-over,
+.pm-box.is-target {
+  border-color: #ea580c;
+  border-style: solid;
+  background: #ffedd5;
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.25), 0 10px 24px rgba(234, 88, 12, 0.12);
+  transform: scale(1.01);
+}
+
+.pm-box.has-items {
+  border-style: solid;
+  border-color: #fb923c;
+  background: #fffaf5;
+}
+
+.pm-box-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #ffedd5;
+}
+
+.pm-box-icon {
+  font-size: 24px;
+}
+
+.pm-box-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pm-box-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #c2410c;
+  letter-spacing: 0.03em;
+}
+
+.pm-box-badge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #c2410c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.pm-box-desc {
+  margin: 0;
+  font-size: 12px;
+  color: #7c2d12;
+  line-height: 1.35;
+}
+
+.pm-box-dropzone {
+  flex: 1;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: rgba(254, 243, 199, 0.2);
+  border: 1.5px dashed #fbd38d;
+  padding: 12px;
+}
+
+.pm-box-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #9a3412;
+  text-align: center;
+}
+
+.pm-box-empty-icon {
+  font-size: 32px;
+  opacity: 0.8;
+}
+
+.pm-box-empty-text {
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pm-box-empty-text small {
+  font-size: 11px;
+  font-weight: 600;
+  color: #c2410c;
+  opacity: 0.85;
+}
+
+.pm-box-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.pm-quarantined-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pm-quarantined-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Rules / Standard Recap Card (on reveal) */
+.pm-rules-card {
+  width: 100%;
+  max-width: 980px;
+  background: #ffffff;
+  border: 2px solid #86efac;
+  border-radius: 20px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 24px rgba(22, 101, 52, 0.12);
+  animation: pmSlideUp 0.3s ease-out;
+}
+
+@keyframes pmSlideUp {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.pm-rules-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #dcfce7;
+}
+
+.pm-rules-icon {
+  font-size: 20px;
+}
+
+.pm-rules-title {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 900;
+  color: #14532d;
+}
+
+.pm-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.pm-rule-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #f0fdf4;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.pm-rule-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.pm-rule-item strong {
+  display: block;
+  font-size: 12px;
+  color: #14532d;
+  margin-bottom: 2px;
+}
+
+.pm-rule-item p {
+  margin: 0;
+  font-size: 11px;
+  color: #334155;
+  line-height: 1.35;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .pm-stage {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .pm-box {
+    width: 100%;
+    max-width: 360px;
+    margin-top: 10px;
+  }
+  .pm-fridge-wrap .fridge-photo {
+    min-height: 300px;
+    max-height: 420px;
+  }
+  .pm-rules-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
